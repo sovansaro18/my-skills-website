@@ -212,7 +212,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
               <Menu size={24} />
             </button>
             <h2 className="text-lg font-bold text-slate-800 dark:text-white font-khmer tracking-wide">
-              {
+              {currentView === AppView.DASHBOARD ? 'ផ្ទាំងគ្រប់គ្រង' :
                currentView === AppView.SHORTCUTS ? 'ឧបករណ៍ជំនួយ' : 
                currentView === AppView.EXERCISES ? 'លំហាត់អនុវត្ត' :
                currentView === AppView.QUIZ ? 'ការប្រឡង' : 
@@ -225,32 +225,36 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
             </h2>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {user ? (
               <a
                 href="https://t.me/sovansaro"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all border border-blue-200 dark:border-blue-800 shadow-sm"
+                className="flex items-center gap-2 p-2 sm:px-4 sm:py-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all border border-blue-200 dark:border-blue-800 shadow-sm"
+                title="ទាក់ទង Admin"
               >
-                <ShieldCheck size={18} />
-                <span className="text-sm font-bold font-khmer">Admin</span>
+                <ShieldCheck size={20} className="sm:w-[18px] sm:h-[18px]" />
+                <span className="hidden sm:inline text-sm font-bold font-khmer">Admin</span>
               </a>
             ) : (
               <div className="flex items-center gap-2">
                 <button 
                   onClick={() => onNavigate(AppView.LOGIN)}
-                  className="text-sm px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 font-khmer flex items-center gap-1"
+                  className="text-sm p-2 sm:px-3 sm:py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 font-khmer flex items-center gap-1 transition-colors"
+                  title="ចូលគណនី"
                 >
-                  <LogIn size={14} />
-                  <span>ចូលគណនី</span>
+                  <LogIn size={20} className="sm:w-[14px] sm:h-[14px]" />
+                  <span className="hidden sm:inline">ចូលគណនី</span>
                 </button>
+
                 <button 
                   onClick={() => onNavigate(AppView.REGISTER)}
-                  className="text-sm px-3 py-1.5 rounded-lg bg-brand-600 text-white hover:bg-brand-700 font-khmer flex items-center gap-1"
+                  className="text-sm p-2 sm:px-3 sm:py-1.5 rounded-lg bg-brand-600 text-white hover:bg-brand-700 font-khmer flex items-center gap-1 transition-colors"
+                  title="ចុះឈ្មោះ"
                 >
-                  <UserPlus size={14} />
-                  <span>ចុះឈ្មោះ</span>
+                  <UserPlus size={20} className="sm:w-[14px] sm:h-[14px]" />
+                  <span className="hidden sm:inline">ចុះឈ្មោះ</span>
                 </button>
               </div>
             )}
