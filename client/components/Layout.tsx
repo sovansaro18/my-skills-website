@@ -212,7 +212,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
               <Menu size={24} />
             </button>
             <h2 className="text-lg font-bold text-slate-800 dark:text-white font-khmer tracking-wide">
-              {currentView === AppView.DASHBOARD ? 'ផ្ទាំងគ្រប់គ្រង' : 
+              {
                currentView === AppView.SHORTCUTS ? 'ឧបករណ៍ជំនួយ' : 
                currentView === AppView.EXERCISES ? 'លំហាត់អនុវត្ត' :
                currentView === AppView.QUIZ ? 'ការប្រឡង' : 
