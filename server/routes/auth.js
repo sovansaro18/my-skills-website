@@ -2,24 +2,20 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const multer = require('multer'); // 👉 ត្រូវការ npm install multer
+const multer = require('multer'); 
 const path = require('path');
 const fs = require('fs');
 
-// ==========================================
-// 1. SETUP MULTER (ការកំណត់កន្លែងផ្ទុកឯកសារ)
-// ==========================================
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = 'uploads/';
-    // បង្កើត folder 'uploads' ដោយស្វ័យប្រវត្តិបើមិនទាន់មាន
     if (!fs.existsSync(uploadDir)){
         fs.mkdirSync(uploadDir);
     }
     cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    // បង្កើតឈ្មោះ file ថ្មី៖ avatar-{timestamp}-{random}.{extension}
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, 'avatar-' + uniqueSuffix + path.extname(file.originalname));
   }
@@ -27,9 +23,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // កំណត់ទំហំអតិបរមា 5MB
+    limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
-        // អនុញ្ញាតតែ file រូបភាព
         if (file.mimetype.startsWith('image/')) {
             cb(null, true);
         } else {
@@ -38,15 +33,10 @@ const upload = multer({
     }
 });
 
-// ==========================================
-// 2. HELPER & MIDDLEWARE
-// ==========================================
-
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
-// Middleware ការពារ Route (ផ្ទៀងផ្ទាត់ Token)
 const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -68,7 +58,7 @@ const protect = async (req, res, next) => {
       });
     }
 
-    req.user = user; // ភ្ជាប់ User ទៅក្នុង Request
+    req.user = user;
     next();
 
   } catch (error) {
@@ -82,11 +72,6 @@ const protect = async (req, res, next) => {
   }
 };
 
-// ==========================================
-// 3. API ROUTES
-// ==========================================
-
-// 👉 REGISTER
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
