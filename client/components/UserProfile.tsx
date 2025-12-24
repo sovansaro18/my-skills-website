@@ -75,7 +75,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ onExit }) => {
       if (avatarFile) data.append('avatar', avatarFile, 'avatar.jpg');
 
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/auth/update-profile', {
+      const API_URL = "https://my-skills-api.onrender.com";
+      const response = await fetch(`${API_URL}/api/auth/update-profile`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`

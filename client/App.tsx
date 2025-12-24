@@ -92,7 +92,7 @@ const App: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const { user, isLoading: authLoading, refreshUser, logout } = useAuth();
-  const DEFAULT_AVATAR = "/Avatar.png";
+  const DEFAULT_AVATAR = "/assets/Avatar.png";
 
   const heroImages = [
     "/assets/slide1.jpg",
