@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { User } from '../../types';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://my-skills-api.onrender.com/api';
 
 axios.defaults.baseURL = API_URL;
 

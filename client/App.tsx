@@ -216,8 +216,8 @@ const App: React.FC = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(
-        "https://my-skills-api.onrender.com",
+     const res = await fetch(
+        "https://my-skills-api.onrender.com/api/auth/toggle-save-lesson",
         {
           method: "POST",
           headers: {
