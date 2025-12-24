@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Menu, Keyboard, Github, Bookmark, Mail, Info, Facebook, 
+  Menu, Keyboard, Github, UserCircle, ChevronDown, Bookmark, Mail, Info, Facebook, 
   ShieldCheck, MessageCircle, Moon, Sun, LayoutDashboard, 
   User, LogOut, LogIn, UserPlus 
 } from 'lucide-react';
@@ -18,6 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const { user, logout } = useAuth();
+  const [isAuthMenuOpen, setIsAuthMenuOpen] = useState(false);
 
   const LOGO_URL = "/assets/MS.png";
   const FALLBACK_AVATAR = "/Avatar.png";
@@ -225,8 +226,9 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
             </h2>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
+<div className="flex items-center gap-2 sm:gap-3">
             {user ? (
+              // ផ្នែកនេះនៅដដែល (Admin Link)
               <a
                 href="https://t.me/sovansaro"
                 target="_blank"
@@ -238,24 +240,60 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
                 <span className="hidden sm:inline text-sm font-bold font-khmer">Admin</span>
               </a>
             ) : (
-              <div className="flex items-center gap-2">
+              // 👇 ផ្នែកកែថ្មី (Dropdown Login/Register)
+              <div className="relative">
+                {/* ១. ប៊ូតុង "គណនី" សម្រាប់ចុចបើក */}
                 <button 
-                  onClick={() => onNavigate(AppView.LOGIN)}
-                  className="text-sm p-2 sm:px-3 sm:py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 font-khmer flex items-center gap-1 transition-colors"
-                  title="ចូលគណនី"
+                  onClick={() => setIsAuthMenuOpen(!isAuthMenuOpen)}
+                  className="flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 >
-                  <LogIn size={20} className="sm:w-[14px] sm:h-[14px]" />
-                  <span className="hidden sm:inline">ចូលគណនី</span>
+                   <UserCircle size={20} className="text-slate-600 dark:text-slate-300" />
+                   <span className="text-sm font-bold text-slate-700 dark:text-slate-200 font-khmer hidden sm:inline">
+                      គណនី
+                   </span>
+                   <ChevronDown 
+                      size={16} 
+                      className={`text-slate-500 transition-transform duration-200 ${isAuthMenuOpen ? 'rotate-180' : ''}`} 
+                   />
                 </button>
 
-                <button 
-                  onClick={() => onNavigate(AppView.REGISTER)}
-                  className="text-sm p-2 sm:px-3 sm:py-1.5 rounded-lg bg-brand-600 text-white hover:bg-brand-700 font-khmer flex items-center gap-1 transition-colors"
-                  title="ចុះឈ្មោះ"
-                >
-                  <UserPlus size={20} className="sm:w-[14px] sm:h-[14px]" />
-                  <span className="hidden sm:inline">ចុះឈ្មោះ</span>
-                </button>
+                {/* ២. ផ្ទាំង Dialog/Dropdown (បង្ហាញតែពេល isAuthMenuOpen = true) */}
+                {isAuthMenuOpen && (
+                  <>
+                    {/* ផ្ទៃខាងក្រោយថ្លាៗ ដើម្បីចុចបិទវិញពេលចុចក្រៅ */}
+                    <div 
+                      className="fixed inset-0 z-10" 
+                      onClick={() => setIsAuthMenuOpen(false)}
+                    ></div>
+
+                    {/* តួខ្លួន Dropdown */}
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 p-2 z-20 animate-in fade-in slide-in-from-top-2 duration-200">
+                      
+                      <button 
+                        onClick={() => {
+                          onNavigate(AppView.LOGIN);
+                          setIsAuthMenuOpen(false); // បិទ menu ពេលចុចរួច
+                        }}
+                        className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-khmer text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"
+                      >
+                        <LogIn size={16} className="text-blue-600" />
+                        ចូលគណនី
+                      </button>
+
+                      <button 
+                        onClick={() => {
+                          onNavigate(AppView.REGISTER);
+                          setIsAuthMenuOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-khmer text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors mt-1"
+                      >
+                        <UserPlus size={16} className="text-green-600" />
+                        ចុះឈ្មោះ
+                      </button>
+
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>
