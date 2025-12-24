@@ -24,10 +24,10 @@ const FeedbackList: React.FC = () => {
   useEffect(() => {
     fetchFeedbacks();
   }, []);
-
-  const fetchFeedbacks = async () => {
+  const API_URL = "https://my-skills-api.onrender.com";
+const fetchFeedbacks = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/feedback');
+      const res = await fetch(`${API_URL}/api/feedback`);
       const data = await res.json();
       if (data.success) {
         setFeedbacks(data.data);
@@ -50,7 +50,7 @@ const FeedbackList: React.FC = () => {
     setIsSubmitting(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/feedback', {
+      const res = await fetch(`${API_URL}/api/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
