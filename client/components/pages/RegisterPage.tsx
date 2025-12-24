@@ -74,23 +74,19 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
   };
 
   return (
-    // ១. កែ Outer Container ឱ្យ Scroll បាន (overflow-y-auto)
     <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 overflow-y-auto">
       
-      {/* ២. ប្រើ min-h-screen ដើម្បីឱ្យវាស្ថិតនៅកណ្តាលពេលអេក្រង់ធំ ហើយ Scroll បានពេលអេក្រង់តូច */}
       <div className="min-h-screen flex items-center justify-center p-4 py-8">
         
         <div className="w-full max-w-md animate-slide-up relative">
           
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl overflow-hidden">
             
-            {/* ៣. កាត់បន្ថយ Padding Header មកត្រឹម p-4 សម្រាប់ Mobile */}
             <div className="bg-gradient-to-r from-green-600 to-emerald-700 p-4 md:p-6 text-white">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-                    {/* ដាក់រូប Logo របស់អ្នកនៅទីនេះ */}
-                    <div className="w-8 h-8 flex items-center justify-center font-bold">MS</div>
+                <div>
+                  <img src="/assets/MS.png" alt="Logo" className="w-12 h-12" />
                   </div>
                   <div>
                     <h1 className="text-lg md:text-xl font-bold font-khmer">MY SKILLS</h1>
@@ -107,7 +103,6 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
               </div>
             </div>
 
-            {/* ៤. កាត់បន្ថយ Padding Body មកត្រឹម p-4 ឬ p-5 សម្រាប់ Mobile */}
             <div className="p-4 md:p-6 sm:p-8">
               {error && (
                 <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-3 animate-slide-up">
@@ -123,7 +118,6 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
                 </div>
               )}
 
-              {/* ៥. Space-y តូចជាងមុនបន្តិច (space-y-4) ដើម្បីសន្សំកន្លែង */}
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
                 <div>
                   <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 font-khmer">
@@ -257,13 +251,6 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
                   ចូលគណនី
                 </button>
               </div>
-
-               {/* Footer Text */}
-               <div className="mt-4 text-center">
-                   <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-500 font-khmer leading-relaxed px-4">
-                    ដោយចុះឈ្មោះ អ្នកយល់ព្រមជាមួយ <span className="text-green-600 cursor-pointer">លក្ខខណ្ឌ</span>
-                  </p>
-               </div>
             </div>
           </div>
         </div>

@@ -54,8 +54,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onExit, onSwitchToRegister }) => 
           <div className="bg-gradient-to-r from-brand-600 to-brand-700 p-6 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-                  <img src="/assets/web2.png" alt="Logo" className="w-8 h-8" />
+                <div>
+                  <img src="/assets/MS.png" alt="Logo" className="w-12 h-12" />
                 </div>
                 <div>
                   <h1 className="text-xl font-bold font-khmer">MY SkillS</h1>
@@ -166,10 +166,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onExit, onSwitchToRegister }) => 
                 ចុះឈ្មោះឥឡូវនេះ
               </button>
             </div>
-
-            <p className="text-center text-xs text-slate-500 dark:text-slate-500 mt-6 font-khmer">
-              ដោយចូលគណនី អ្នកទទួលស្គាល់លក្ខខណ្ឌនិងគោលការណ៍ភាពឯកជនរបស់យើង។
-            </p>
           </div>
         </div>
       </div>

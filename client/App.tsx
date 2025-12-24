@@ -25,7 +25,6 @@ import AboutUs from "./components/AboutUs";
 import SavedLessons from "./components/SavedLessons";
 import PortfolioSection from './components/PortfolioSection';
 import HomeworkSubmission from './components/HomeworkSubmission';
-import Snowfall from "react-snowfall";
 
 import { motion, AnimatePresence, Variants } from "framer-motion";
 
@@ -391,7 +390,6 @@ const App: React.FC = () => {
         initial="initial" animate="animate" exit="exit" variants={pageTransition}
         className="space-y-8"
       >
-        <Snowfall color="#82C3D9" />
         <div className="space-y-4">
           <motion.button
             whileHover={{ scale: 1.05, x: -5 }}
@@ -521,7 +519,6 @@ const App: React.FC = () => {
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         className="h-[calc(100vh-64px)] flex bg-white dark:bg-slate-900 -m-4 sm:-m-6 lg:-m-8 font-sans overflow-hidden transition-colors"
       >
-        <Snowfall color="#82C3D9" />
         <div
           className={`
             fixed inset-y-0 left-0 z-40 w-80 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 flex flex-col shadow-xl md:shadow-none
