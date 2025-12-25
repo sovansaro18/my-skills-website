@@ -112,7 +112,6 @@ const App: React.FC = () => {
     return selectedCourse.modules.flatMap((m) => m.lessons);
   }, [selectedCourse]);
 
-  // --- Animation Variants ---
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -263,7 +262,7 @@ const App: React.FC = () => {
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-slate-200 dark:border-slate-700 border-t-brand-600 dark:border-t-brand-500 rounded-full animate-spin mx-auto"></div>
           <p className="mt-4 text-slate-600 dark:text-slate-400 font-khmer">
-            កំពុងពិនិត្យការផ្ទៀងផ្ទាត់...
+            កំពុងផ្ទៀងផ្ទាត់...
           </p>
         </div>
       </div>
@@ -372,7 +371,6 @@ const App: React.FC = () => {
         </div>
       </motion.div>
 
-      {/* Portfolio Section with Animation */}
       <motion.div variants={itemVariants}>
         <PortfolioSection />
       </motion.div>

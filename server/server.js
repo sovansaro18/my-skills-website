@@ -8,8 +8,14 @@ const feedbackRoutes = require('./routes/feedback');
 
 const app = express();
 
+
 app.use(cors({
-  origin: ["https://my-skills-frontend.onrender.com", "http://localhost:3000"],
+  origin: [
+    "https://my-skills-frontend.onrender.com",
+    "http://localhost:3000",
+    "https://sovansaro.site",
+    "https://www.sovansaro.site"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true 
 }));
