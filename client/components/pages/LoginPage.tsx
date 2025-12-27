@@ -39,6 +39,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onExit, onSwitchToRegister }) => 
     setError('');
 
     try {
+      // 👇 បន្ថែមការពន្យារពេល ៣ វិនាទី ដើម្បីឱ្យឃើញ Animation "កំពុងផ្ទៀងផ្ទាត់..."
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
       await login(formData.email, formData.password);
       onExit();
     } catch (err: any) {
@@ -59,7 +62,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onExit, onSwitchToRegister }) => 
                   <img src="/assets/MS.png" alt="Logo" className="w-12 h-12" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold font-khmer">MY SkillS</h1>
+                  <h1 className="text-xl font-bold font-khmer">MY SKILLS</h1>
                   <p className="text-brand-100 text-sm font-khmer">សូមចូលគណនីរបស់អ្នក</p>
                 </div>
               </div>
@@ -132,27 +135,27 @@ const LoginPage: React.FC<LoginPageProps> = ({ onExit, onSwitchToRegister }) => 
                 </p>
               </div>
 
-                <button
-                    type="submit"
-                    disabled={isLoading}
-                    className={`w-full py-3.5 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-3 shadow-lg ${
-                      isLoading
-                        ? 'bg-slate-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 hover:shadow-xl active:scale-[0.98]'
-                    }`}
-                  >
-                    {isLoading ? (
-                      <>
-                        <BeatLoader color="#ffffff" size={10} margin={2} />
-                        <span className="font-khmer ml-1">កំពុងផ្ទៀងផ្ទាត់...</span>
-                      </>
-                    ) : (
-                      <>
-                        <LogIn size={18} />
-                        <span className="font-khmer">ចូលគណនី</span>
-                      </>
-                    )}
-                  </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full py-3.5 rounded-xl font-bold text-white transition-all flex items-center justify-center gap-3 shadow-lg ${
+                  isLoading
+                    ? 'bg-slate-400 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 hover:shadow-xl active:scale-[0.98]'
+                }`}
+              >
+                {isLoading ? (
+                  <>
+                    <BeatLoader color="#ffffff" size={10} margin={2} />
+                    <span className="font-khmer ml-1">កំពុងផ្ទៀងផ្ទាត់...</span>
+                  </>
+                ) : (
+                  <>
+                    <LogIn size={18} />
+                    <span className="font-khmer">ចូលគណនី</span>
+                  </>
+                )}
+              </button>
             </form>
 
             <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700 text-center">

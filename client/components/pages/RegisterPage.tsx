@@ -54,15 +54,22 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
     setIsLoading(true);
+    if (!validateForm()) {
+        setIsLoading(false); // កុំភ្លេចបិទ Loading បើ Form ខុស
+        return;
+    }
+
     setError('');
     setSuccess('');
 
     try {
+      // ពន្យារពេល 3 វិនាទី (Artificial Delay)
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
       await register(formData.name, formData.email, formData.password);
       setSuccess('ចុះឈ្មោះជោគជ័យ! កំពុងចូលគណនី...');
+      
       setTimeout(() => {
         onExit();
       }, 1500);
@@ -228,7 +235,8 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
                   {isLoading ? (
                     <>
                       <BeatLoader color="#ffffff" size={10} margin={2} />
-                          <span className="font-khmer ml-1">កំពុងចុះឈ្មោះ...</span>
+                      {/* 👇 បានកែត្រង់នេះ */}
+                      <span className="font-khmer ml-1">កំពុងផ្ទៀងផ្ទាត់...</span>
                     </>
                   ) : (
                     <>
