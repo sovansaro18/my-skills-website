@@ -87,7 +87,6 @@ const App: React.FC = () => {
     }
   }, [currentView, selectedCourse, selectedModule, selectedLesson]);
 
-  // --- UI STATE ---
   const [showLessonSidebar, setShowLessonSidebar] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -95,10 +94,10 @@ const App: React.FC = () => {
   const DEFAULT_AVATAR = "/assets/Avatar.png";
 
   const heroImages = [
-    "/assets/slide1.jpg",
-    "/assets/slide2.jpg",
-    "/assets/slide3.jpg",
-    "/assets/slide4.jpg",
+    "https://res.cloudinary.com/dzivaqghe/image/upload/v1766850777/slide1_fhpjlp.jpg",
+    "https://res.cloudinary.com/dzivaqghe/image/upload/v1766850793/slide2_gzx3d5.png",
+    "https://res.cloudinary.com/dzivaqghe/image/upload/v1766850778/slide3_aokb7t.jpg",
+    "https://res.cloudinary.com/dzivaqghe/image/upload/v1766850791/slide4_eju0e6.png",
   ];
 
   useEffect(() => {
@@ -261,11 +260,10 @@ if (authLoading) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-brand-50 dark:from-slate-900 dark:to-slate-950 flex items-center justify-center">
       <div className="text-center flex flex-col items-center">
-        {/* ប្រើ BeatLoader ជំនួស Spinner ចាស់ */}
         <BeatLoader 
-          color="#16a34a"   // ពណ៌បៃតង (Brand color)
-          size={15}         // ទំហំ
-          margin={4}        // គម្លាត
+          color="#16a34a" 
+          size={15} 
+          margin={4} 
         />
         <p className="mt-4 text-slate-600 dark:text-slate-400 font-khmer font-medium animate-pulse">
           កំពុងដំណើរការ...
