@@ -2,36 +2,26 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const multer = require('multer'); 
-const path = require('path');
-const fs = require('fs');
+const multer = require('multer');
 
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadDir = 'uploads/';
-    if (!fs.existsSync(uploadDir)){
-        fs.mkdirSync(uploadDir);
-    }
-    cb(null, uploadDir);
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'my-skills-avatars',
+    allowed_formats: ['jpg', 'png', 'jpeg', 'webp'], 
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'avatar-' + uniqueSuffix + path.extname(file.originalname));
-  }
 });
 
-const upload = multer({ 
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 },
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype.startsWith('image/')) {
-            cb(null, true);
-        } else {
-            cb(new Error('អនុញ្ញាតតែរូបភាពប៉ុណ្ណោះ!'));
-        }
-    }
-});
+const upload = multer({ storage: storage });
 
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -168,20 +158,20 @@ router.get('/me', protect, async (req, res) => {
 
 router.put('/update-profile', protect, upload.single('avatar'), async (req, res) => {
   try {
-    const user = req.user; // បានមកពី protect middleware
+    const user = req.user; 
     const { name, email, password } = req.body;
 
     if (name) user.name = name;
     if (email) user.email = email.toLowerCase();
     
     if (password && password.trim() !== '') {
-      user.password = password; // User model នឹង hash ស្វ័យប្រវត្តិដោយ pre-save hook
+      user.password = password; 
     }
 
+    // 👇 ៤. កែត្រង់នេះ៖ ប្រើ Link ផ្ទាល់ពី Cloudinary
     if (req.file) {
-        const protocol = req.protocol;
-        const host = req.get('host');
-        user.avatar = `${protocol}://${host}/uploads/${req.file.filename}`;
+        // Cloudinary ផ្តល់ Link រូបភាពពេញលេញមកឱ្យស្រាប់តាមរយៈ req.file.path
+        user.avatar = req.file.path; 
     }
 
     const updatedUser = await user.save();
@@ -231,16 +221,13 @@ router.post('/toggle-save-lesson', protect, async (req, res) => {
     const { courseId, moduleId, lessonId, title } = req.body;
     const user = req.user;
 
-    // ពិនិត្យមើលថាតើមេរៀននេះមានក្នុងបញ្ជីឬនៅ?
     const existingIndex = user.savedLessons.findIndex(
       item => item.lessonId === lessonId && item.courseId === courseId
     );
 
     if (existingIndex > -1) {
-      // បើមានហើយ -> លុបចេញ (Unsave)
       user.savedLessons.splice(existingIndex, 1);
     } else {
-      // បើមិនទាន់មាន -> ដាក់ចូល (Save)
       user.savedLessons.push({ courseId, moduleId, lessonId, title });
     }
 
@@ -249,11 +236,12 @@ router.post('/toggle-save-lesson', protect, async (req, res) => {
     res.json({
       success: true,
       savedLessons: user.savedLessons,
-      isSaved: existingIndex === -1 // true បើទើបតែ save, false បើទើបតែ unsave
+      isSaved: existingIndex === -1 
     });
 
   } catch (error) {
     res.status(500).json({ success: false, message: 'បរាជ័យក្នុងការរក្សាទុក' });
   }
 });
+
 module.exports = router;
