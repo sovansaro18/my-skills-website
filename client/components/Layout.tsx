@@ -164,7 +164,6 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
           )}
         </div>
 
-        {/* Sidebar Footer (User Info & Theme) */}
         <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
           {user && (
             <div className="space-y-3">
@@ -202,7 +201,6 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
         </div>
       </aside>
 
-      {/* ================= MAIN CONTENT ================= */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 h-16 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30 transition-colors">
           <div className="flex items-center gap-4">
@@ -228,7 +226,6 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
 
 <div className="flex items-center gap-2 sm:gap-3">
             {user ? (
-              // ផ្នែកនេះនៅដដែល (Admin Link)
               <a
                 href="https://t.me/sovansaro"
                 target="_blank"
@@ -240,9 +237,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
                 <span className="hidden sm:inline text-sm font-bold font-khmer">Admin</span>
               </a>
             ) : (
-              // 👇 ផ្នែកកែថ្មី (Dropdown Login/Register)
               <div className="relative">
-                {/* ១. ប៊ូតុង "គណនី" សម្រាប់ចុចបើក */}
                 <button 
                   onClick={() => setIsAuthMenuOpen(!isAuthMenuOpen)}
                   className="flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
@@ -257,22 +252,19 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
                    />
                 </button>
 
-                {/* ២. ផ្ទាំង Dialog/Dropdown (បង្ហាញតែពេល isAuthMenuOpen = true) */}
                 {isAuthMenuOpen && (
                   <>
-                    {/* ផ្ទៃខាងក្រោយថ្លាៗ ដើម្បីចុចបិទវិញពេលចុចក្រៅ */}
                     <div 
                       className="fixed inset-0 z-10" 
                       onClick={() => setIsAuthMenuOpen(false)}
                     ></div>
 
-                    {/* តួខ្លួន Dropdown */}
                     <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 p-2 z-20 animate-in fade-in slide-in-from-top-2 duration-200">
                       
                       <button 
                         onClick={() => {
                           onNavigate(AppView.LOGIN);
-                          setIsAuthMenuOpen(false); // បិទ menu ពេលចុចរួច
+                          setIsAuthMenuOpen(false); 
                         }}
                         className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-khmer text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 transition-colors"
                       >
@@ -299,13 +291,11 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
           </div>
         </header>
 
-        {/* Dynamic Content Area */}
         <div className="flex-1 overflow-y-auto flex flex-col scroll-smooth">
           <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
             {children}
           </div>
 
-          {/* Footer  */}
           {currentView === AppView.DASHBOARD && (
             <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-10 px-6 mt-auto transition-colors">
               <div className="max-w-6xl mx-auto">
@@ -315,12 +305,12 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
                       <img src={LOGO_URL} alt="Logo" className="w-6 h-6 object-contain" />
                       <span className="font-bold text-slate-800 dark:text-white text-lg">MY SkillS</span>
                     </div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 font-khmer">រៀនជំនាញកុំព្យូទ័រ សម្រាប់បំពេញការងារទូទៅ។</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 font-khmer">ចាប់ផ្ដើមរៀនជំនាញរបស់អ្នកនៅទីនេះ។</p>
                     <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">© 2024 Sovansaro. All rights reserved.</p>
                   </div>
 
                   <div className="flex flex-col items-center md:items-end gap-3">
-                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 font-khmer">ទំនាក់ទំនងពួកយើង</span>
+                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 font-khmer">ប្រព័ន្ធផ្សព្វផ្សាយរបស់ខ្ញុំ</span>
                     <div className="flex items-center gap-3">
                       {contactLinks.map((link) => (
                         <a

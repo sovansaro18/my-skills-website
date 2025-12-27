@@ -24,7 +24,6 @@ import UserProfile from "./components/UserProfile";
 import FeedbackList from "./components/FeedbackList";
 import AboutUs from "./components/AboutUs";
 import SavedLessons from "./components/SavedLessons";
-import PortfolioSection from './components/PortfolioSection';
 import HomeworkSubmission from './components/HomeworkSubmission';
 
 import { motion, AnimatePresence, Variants } from "framer-motion";
@@ -171,6 +170,11 @@ const App: React.FC = () => {
   };
 
   const handleLessonClick = async (module: Module, lesson: Lesson) => {
+    if (!user) {
+      setCurrentView(AppView.LOGIN);
+      return;
+    }
+
     const targetModule =
       module ||
       selectedCourse?.modules.find((m) =>
@@ -204,6 +208,11 @@ const App: React.FC = () => {
     moduleId: string,
     lessonId: string
   ) => {
+    if (!user) {
+      setCurrentView(AppView.LOGIN);
+      return;
+    }
+
     const course = COURSES.find((c) => c.id === courseId);
     if (!course) return;
 
@@ -321,7 +330,7 @@ if (authLoading || minLoading) {
       </motion.div>
 
       {user && (
-        <motion.div variants={itemVariants} className="bg-slate-50 text-slate-800 dark:bg-slate-800 dark:text-slate-100 rounded-2xl p-6 shadow-md mb-6">
+        <motion.div variants={itemVariants} className="bg-slate-50 text-slate-800 dark:bg-slate-800 dark:text-slate-100 rounded-2xl p-6 shadow-md">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold font-khmer">
@@ -386,10 +395,7 @@ if (authLoading || minLoading) {
         </div>
       </motion.div>
 
-      <motion.div variants={itemVariants}>
-        <PortfolioSection />
-      </motion.div>
-
+      {/* 👇 បានដក PortfolioSection ចេញពីទីនេះ */}
       <motion.div variants={itemVariants}>
         <FeedbackList />
       </motion.div>
@@ -552,7 +558,7 @@ if (authLoading || minLoading) {
               </button>
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <div className="flex-1 overflow-y-auto">
             {selectedCourse.modules.map((module, mIdx) => (
               <div key={module.id} className="mb-2">
                 <div className="px-4 py-1 text-base font-bold uppercase bg-slate-300/50 tracking-wider text-gray-800 dark:text-slate-200 font-khmer mt-2 flex items-center gap-2">
@@ -621,7 +627,7 @@ if (authLoading || minLoading) {
               {currentIndex + 1} / {flatLessons.length}
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto custom-scrollbar scroll-smooth">
+          <div className="flex-1 overflow-y-auto  scroll-smooth">
             <div className="max-w-4xl mx-auto w-full pb-24">
               <div className="px-6 md:px-10 pt-8 md:pt-10 mb-6">
                 <div className="flex items-center justify-between mb-4">

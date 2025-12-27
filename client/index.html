@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
-        darkMode: 'class', // Enable class-based dark mode
+        darkMode: 'class',
         theme: {
           extend: {
             fontFamily: {
@@ -25,7 +25,7 @@
                 300: '#a5b4fc',
                 400: '#818cf8',
                 500: '#6366f1',
-                600: '#4f46e5', // Primary Indigo
+                600: '#4f46e5',
                 700: '#4338ca',
                 800: '#3730a3',
                 900: '#312e81',
@@ -57,26 +57,13 @@
     </script>
     <style>
       body { font-family: 'Inter', 'Battambang', sans-serif; }
-      /* Custom scrollbar */
       ::-webkit-scrollbar {
-        width: 4px;
-        height: 4px;
+        display: none;
       }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
-      }
-      .dark ::-webkit-scrollbar-track {
-        background: #1e293b; 
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #c7d2fe; 
-        border-radius: 2px;
-      }
-      .dark ::-webkit-scrollbar-thumb {
-        background: #4f46e5; 
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #818cf8; 
+
+      * {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
       }
       .glass-panel {
         background: rgba(255, 255, 255, 0.7);

@@ -1,13 +1,26 @@
 import React from 'react';
-import { Info, Code, Heart, Globe, Database, Server } from 'lucide-react';
+import { 
+  Info, Code, Heart, Globe, Database, Server, 
+  Layout, Github, Smartphone, Layers, Cpu 
+} from 'lucide-react';
 import Snowfall from 'react-snowfall';
 
-
 const AboutUs: React.FC = () => {
+  // ទិន្នន័យ Skills (យកមកពី PortfolioSection)
+  const skills = [
+    { name: 'HTML5 & CSS3', icon: <Layout size={24} />, level: 'Advanced', color: 'text-orange-500 bg-orange-50 dark:bg-orange-900/20' },
+    { name: 'JavaScript (ES6+)', icon: <Code size={24} />, level: 'Advanced', color: 'text-yellow-500 bg-yellow-50 dark:bg-yellow-900/20' },
+    { name: 'React.js & TypeScript', icon: <Cpu size={24} />, level: 'Intermediate', color: 'text-blue-500 bg-blue-50 dark:bg-blue-900/20' },
+    { name: 'Tailwind CSS', icon: <Layers size={24} />, level: 'Advanced', color: 'text-cyan-500 bg-cyan-50 dark:bg-cyan-900/20' },
+    { name: 'Git & GitHub', icon: <Github size={24} />, level: 'Intermediate', color: 'text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800' },
+    { name: 'Responsive Design', icon: <Smartphone size={24} />, level: 'Advanced', color: 'text-purple-500 bg-purple-50 dark:bg-purple-900/20' },
+  ];
+
   return (
-    
     <div className="max-w-4xl mx-auto animate-fade-in space-y-8 pb-10">
       <Snowfall color="#82C3D9" />
+      
+      {/* ផ្នែកចំណងជើង */}
       <div className="text-center space-y-4 py-8">
         <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white font-khmer">
           អំពីគម្រោង <span className="text-brand-600 dark:text-brand-400">MY SkillS</span>
@@ -17,8 +30,9 @@ const AboutUs: React.FC = () => {
         </p>
       </div>
 
+      {/* ផ្នែកគោលបំណង និងគុណតម្លៃ */}
       <div className="grid md:grid-cols-2 gap-6">
-        <div className=" border-orange-500/50 bg-orange-400/10   p-8 md:p-12 dark:text-white text-slate-500 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+        <div className="border-orange-500/50 bg-orange-400/10 p-8 md:p-12 dark:text-white text-slate-500 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
           <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6">
             <Info size={24} />
           </div>
@@ -28,7 +42,7 @@ const AboutUs: React.FC = () => {
           </p>
         </div>
 
-        <div className=" border-orange-500/50 bg-orange-400/10  p-8 md:p-12 dark:text-white text-slate-500 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+        <div className="border-orange-500/50 bg-orange-400/10 p-8 md:p-12 dark:text-white text-slate-500 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
           <div className="w-12 h-12 bg-rose-100 dark:bg-rose-900/30 rounded-xl flex items-center justify-center text-rose-600 dark:text-rose-400 mb-6">
             <Heart size={24} />
           </div>
@@ -39,7 +53,8 @@ const AboutUs: React.FC = () => {
         </div>
       </div>
 
-      <div className="border border-orange-500/50 bg-orange-400/10  rounded-3xl p-8 md:p-12 dark:text-white text-slate-500 shadow-lg overflow-hidden relative">
+      {/* ផ្នែកបច្ចេកវិទ្យា (Tech Stack) */}
+      <div className="border border-orange-500/50 bg-orange-400/10 rounded-3xl p-8 md:p-12 dark:text-white text-slate-500 shadow-lg overflow-hidden relative">
         <div className="absolute top-0 right-0 p-12 opacity-10">
             <Code size={200} />
         </div>
@@ -71,7 +86,32 @@ const AboutUs: React.FC = () => {
         </div>
       </div>
 
-      {/* Developer Section */}
+      {/* 👇 ផ្នែក Skills ថ្មីដែលបានបន្ថែមចូល */}
+      <div className="pt-8 border-t border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-3 mb-8">
+            <div className="bg-white dark:bg-slate-800 p-2 rounded-xl text-blue-600 dark:text-blue-400 shadow-sm border border-slate-100 dark:border-slate-700">
+                <Code size={24} />
+            </div>
+            <div>
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-white font-khmer">Frontend Developer Skills</h2>
+                <p className="text-slate-500 dark:text-slate-400 font-khmer text-sm">ជំនាញបច្ចេកទេសដែលខ្ញុំមាន</p>
+            </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+            {skills.map((skill, index) => (
+                <div key={index} className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 text-center group">
+                    <div className={`w-12 h-12 mx-auto rounded-full flex items-center justify-center mb-3 transition-colors ${skill.color}`}>
+                        {skill.icon}
+                    </div>
+                    <h3 className="font-bold text-slate-800 dark:text-white text-sm">{skill.name}</h3>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 mt-1 block">{skill.level}</span>
+                </div>
+            ))}
+        </div>
+      </div>
+
+      {/* Developer Footer */}
       <div className="text-center pt-8 border-t border-slate-200 dark:border-slate-800">
         <p className="text-slate-500 dark:text-slate-400 font-khmer text-sm">
             បង្កើតឡើងដោយ <span className="font-bold text-slate-800 dark:text-white">ភិក្ខុ សុវណ្ណសរោ រីម រ៉ាវី</span>
