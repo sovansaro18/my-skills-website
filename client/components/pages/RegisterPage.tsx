@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BeatLoader } from "react-spinners";
 import { User, Mail, Lock, Eye, EyeOff, ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -32,7 +33,6 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
   };
 
   const validateForm = (): boolean => {
-    // ... (កូដ validateForm នៅដដែល)
     if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
       setError('សូមបំពេញរាល់ព័ត៌មាន');
       return false;
@@ -227,8 +227,8 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
                 >
                   {isLoading ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span className="font-khmer">កំពុងចុះឈ្មោះ...</span>
+                      <BeatLoader color="#ffffff" size={10} margin={2} />
+                          <span className="font-khmer ml-1">កំពុងចុះឈ្មោះ...</span>
                     </>
                   ) : (
                     <>

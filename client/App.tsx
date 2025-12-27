@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { BeatLoader } from "react-spinners";
 import Layout from "./components/Layout";
 import CourseCard from "./components/CourseCard";
 import ShortcutGuide from "./components/ShortcutGuide";
@@ -256,18 +257,23 @@ const App: React.FC = () => {
     }
   };
 
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-brand-50 dark:from-slate-900 dark:to-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-slate-200 dark:border-slate-700 border-t-brand-600 dark:border-t-brand-500 rounded-full animate-spin mx-auto"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400 font-khmer">
-            កំពុងផ្ទៀងផ្ទាត់...
-          </p>
-        </div>
+if (authLoading) {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-brand-50 dark:from-slate-900 dark:to-slate-950 flex items-center justify-center">
+      <div className="text-center flex flex-col items-center">
+        {/* ប្រើ BeatLoader ជំនួស Spinner ចាស់ */}
+        <BeatLoader 
+          color="#16a34a"   // ពណ៌បៃតង (Brand color)
+          size={15}         // ទំហំ
+          margin={4}        // គម្លាត
+        />
+        <p className="mt-4 text-slate-600 dark:text-slate-400 font-khmer font-medium animate-pulse">
+          កំពុងដំណើរការ...
+        </p>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   const renderDashboard = () => (
     <motion.div
