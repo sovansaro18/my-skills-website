@@ -64,6 +64,7 @@ const App: React.FC = () => {
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  const [minLoading, setMinLoading] = useState(true);
 
   useEffect(() => {
     if (currentView) localStorage.setItem("currentView", currentView);
@@ -106,6 +107,16 @@ const App: React.FC = () => {
     }, 5000);
     return () => clearInterval(slideInterval);
   }, [heroImages.length]);
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMinLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
 
   const flatLessons = useMemo(() => {
     if (!selectedCourse) return [];
@@ -256,7 +267,7 @@ const App: React.FC = () => {
     }
   };
 
-if (authLoading) {
+if (authLoading || minLoading) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-brand-50 dark:from-slate-900 dark:to-slate-950 flex items-center justify-center">
       <div className="text-center flex flex-col items-center">
