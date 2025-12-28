@@ -1,4 +1,3 @@
-// client/src/index.tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
@@ -6,15 +5,15 @@ import { AuthProvider } from './components/contexts/AuthContext';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
+	throw new Error("Could not find root element to mount to");
 }
 
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(
-  <React.StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </React.StrictMode>
+	<React.StrictMode>
+		<AuthProvider>
+			<App />
+		</AuthProvider>
+	</React.StrictMode>
 );

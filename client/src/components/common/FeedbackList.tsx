@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Star, Send, MessageSquare, Heart, Quote, User, CheckCircle, AlertCircle, X, Sparkles } from 'lucide-react';
-import { useAuth } from './contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Feedback {

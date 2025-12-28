@@ -1,5 +1,5 @@
 import React from 'react';
-import { Course } from '../types';
+import { Course } from '../../types';
 import { BookOpen, BarChart } from 'lucide-react';
 
 interface CourseCardProps {

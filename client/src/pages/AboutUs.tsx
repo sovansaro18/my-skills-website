@@ -1,4 +1,4 @@
-import React from 'react';
+// movimport React from 'react';
 import { 
   Info, Code, Heart, Globe, Database, Server, 
   Layout, Github, Smartphone, Layers, Cpu 

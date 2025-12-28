@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bookmark, PlayCircle, Clock, ArrowRight } from 'lucide-react';
-import { useAuth } from './contexts/AuthContext';
-import { AppView } from '../types';
+import { useAuth } from '../contexts/AuthContext';
+import { AppView } from '../../types';
 
 interface SavedLessonsProps {
   onNavigate: (view: AppView) => void;

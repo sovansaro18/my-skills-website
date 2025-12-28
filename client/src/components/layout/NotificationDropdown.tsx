@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Bell, Check, Info, BookOpen, Star, X, Clock, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from './contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 // កំណត់ Type សម្រាប់ Notification
 interface Notification {

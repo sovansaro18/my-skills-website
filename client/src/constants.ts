@@ -1,3 +1,4 @@
+// This file has been moved to src/ and is no longer needed.
 import { Course, Module } from './types';
 import * as Lessons from './data/lessonContents';
 

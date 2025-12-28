@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { User, Mail, Lock, Save, Camera, CheckCircle, AlertCircle, X } from 'lucide-react';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../utils/cropImage';
-import { useAuth } from './contexts/AuthContext';
+import { useAuth } from '../components/contexts/AuthContext';
 interface UserProfileProps {
   onExit: () => void;
 }

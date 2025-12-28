@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import AdminNotificationSender from '../AdminNotificationSender'; // ផ្លាស់ប្តូរតាមទីតាំងជាក់ស្តែងរបស់បង
+import { useAuth } from '../components/contexts/AuthContext';
+import AdminNotificationSender from '../components/admin/AdminNotificationSender';
 import { ArrowLeft } from 'lucide-react';
 
 interface AdminPageProps {
@@ -14,7 +14,6 @@ const AdminPage: React.FC<AdminPageProps> = ({ onExit }) => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 p-6 md:p-10">
       <div className="max-w-4xl mx-auto">
         
-        {/* ប៊ូតុងត្រឡប់ក្រោយ */}
         <button 
           onClick={onExit}
           className="mb-6 flex items-center gap-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors font-khmer"

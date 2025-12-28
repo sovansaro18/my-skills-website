@@ -1,0 +1,26 @@
+src/components/
+admin
+layout
+course
+
+Move files----------------
+Move to src/components/admin/:
+AdminNotificationSender.tsx
+--------------------------
+Move to src/components/layout/:
+Layout.tsx
+NotificationDropdown.tsx
+-----------------------
+Move to src/components/course/:
+CourseCard.tsx
+LessonView.tsx
+SavedLessons.tsx
+HomeworkSubmission.tsx
+--------------------
+Move to src/pages/
+AdminPage.tsx
+LoginPage.tsx
+RegisterPage.tsx
+UserProfile.tsx
+AboutUs.tsx
+ShortcutGuide.tsx

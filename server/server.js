@@ -1,25 +1,25 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const authRoutes = require('./routes/auth');
+const connectDB = require('./config/db');
+
+const authRoutes = require('./routes/authRoutes');
 const feedbackRoutes = require('./routes/feedback');
 const notificationRoutes = require('./routes/notificationRoutes');
 
-
 const app = express();
-
 
 app.use(cors({
   origin: [
     "https://my-skills-frontend.onrender.com",
     "http://localhost:3000",
+    "http://localhost:5173", 
     "https://sovansaro.site",
     "https://www.sovansaro.site"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true 
+  credentials: true
 }));
 
 app.use(express.json());
@@ -30,19 +30,10 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => {
-  console.log('✅ MongoDB connected');
-})
-.catch(err => {
-  console.error('❌ MongoDB connection error:', err);
-  process.exit(1);
-});
-
+// Connect to DB
+connectDB();
 
 app.use('/api/auth', authRoutes);
 app.use('/api/feedback', feedbackRoutes);
@@ -52,7 +43,6 @@ app.get('/api/health', (req, res) => {
   res.json({
     success: true,
     message: 'Server is running',
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
   });
 });
 

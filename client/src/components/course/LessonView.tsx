@@ -4,7 +4,7 @@ import {
   Bookmark, ChevronRight, ChevronLeft, Home, PlayCircle,
   ArrowLeft, BookOpen 
 } from "lucide-react";
-import { Course, Module, Lesson } from "../types";
+import { Course, Module, Lesson } from "../../types";
 import HomeworkSubmission from './HomeworkSubmission';
 
 const getEmbedUrl = (url: string | undefined) => {

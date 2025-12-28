@@ -1,21 +1,23 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { BeatLoader } from "react-spinners";
-import Layout from "./components/Layout";
-import CourseCard from "./components/CourseCard";
-import ShortcutGuide from "./components/ShortcutGuide";
-import LoginPage from "./components/pages/LoginPage";
-import RegisterPage from "./components/pages/RegisterPage";
+import { motion, AnimatePresence } from "framer-motion";
+import { BookOpen, X } from "lucide-react";
+
+import Layout from "./components/layout/Layout";
+import CourseCard from "./components/course/CourseCard";
+import ShortcutGuide from "./pages/ShortcutGuide";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import AdminPage from "./pages/AdminPage";
+import UserProfile from "./pages/UserProfile";
+import AboutUs from "./pages/AboutUs";
+import FeedbackList from "./components/common/FeedbackList"; 
+import SavedLessons from "./components/course/SavedLessons";
+import LessonView from "./components/course/LessonView";
+
+import { useAuth } from "./components/contexts/AuthContext"; 
 import { COURSES } from "./constants";
 import { Course, Module, Lesson, AppView } from "./types";
-import { BookOpen, X } from "lucide-react";
-import { useAuth } from "./components/contexts/AuthContext";
-import UserProfile from "./components/UserProfile";
-import FeedbackList from "./components/FeedbackList";
-import AboutUs from "./components/AboutUs";
-import SavedLessons from "./components/SavedLessons";
-import LessonView from "./components/LessonView";
-import AdminPage from "./components/pages/AdminPage";
-import { motion, AnimatePresence, Variants } from "framer-motion";
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(() => (localStorage.getItem("currentView") as AppView) || AppView.DASHBOARD);
@@ -128,7 +130,8 @@ const App: React.FC = () => {
     if (!selectedCourse || !selectedModule || !selectedLesson || !user) return;
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("https://my-skills-api.onrender.com/api/auth/toggle-save-lesson", {
+      // ត្រូវប្រាកដថា API URL ត្រឹមត្រូវ
+      const res = await fetch("http://localhost:5000/api/auth/toggle-save-lesson", { 
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
@@ -146,13 +149,11 @@ const App: React.FC = () => {
     localStorage.removeItem("courseId");
   };
 
-if (authLoading || minLoading) {
+  if (authLoading || minLoading) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center relative overflow-hidden font-khmer">
-        
         <div className="relative z-10 flex flex-col items-center">
           <BeatLoader color="#87e8d5" size={15} margin={4} />
-
           <motion.p 
             initial={{ y: 10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -162,7 +163,6 @@ if (authLoading || minLoading) {
             កំពុងដំណើរការ...
           </motion.p>
         </div>
-
       </div>
     );
   }
@@ -209,7 +209,7 @@ if (authLoading || minLoading) {
     </motion.div>
   );
 
-if (currentView === AppView.LOGIN) {
+  if (currentView === AppView.LOGIN) {
     return <LoginPage onExit={() => setCurrentView(AppView.DASHBOARD)} onSwitchToRegister={() => setCurrentView(AppView.REGISTER)} />;
   }
 
@@ -248,7 +248,7 @@ if (currentView === AppView.LOGIN) {
     );
   }
 
-    return (
+  return (
       <>
         <Layout currentView={currentView} onNavigate={setCurrentView}>
           <AnimatePresence mode="wait">
@@ -270,7 +270,7 @@ if (currentView === AppView.LOGIN) {
           )}
         </AnimatePresence>
       </>
-    );
-  };
+  );
+};
 
 export default App;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BeatLoader } from 'react-spinners';
 import { Mail, Lock, LogIn, Eye, EyeOff, ArrowLeft, AlertCircle } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../components/contexts/AuthContext';
 
 interface LoginPageProps {
   onExit: () => void;
@@ -39,7 +39,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onExit, onSwitchToRegister }) => 
     setError('');
 
     try {
-      // 👇 បន្ថែមការពន្យារពេល ៣ វិនាទី ដើម្បីឱ្យឃើញ Animation "កំពុងផ្ទៀងផ្ទាត់..."
       await new Promise(resolve => setTimeout(resolve, 3000));
 
       await login(formData.email, formData.password);

@@ -1,0 +1,71 @@
+# BACKEND REFACTORING INSTRUCTION
+# GOAL: Reorganize the "server" directory into a Standard MVC Structure.
+
+==================================================
+PHASE 1: CREATE DIRECTORY STRUCTURE
+==================================================
+Please create the following directories inside "server/" if they do not exist:
+
+1. server/config       # Database connection & External service configs (Cloudinary, etc.)
+2. server/controllers  # Business logic (functions that handle requests)
+3. server/models       # Database Schemas (Mongoose models)
+4. server/routes       # API Endpoints (URL definitions)
+5. server/middleware   # Authentication & Error handling
+6. server/utils        # Helper functions (Token generation, Validators)
+
+==================================================
+PHASE 2: MOVE & ORGANIZE FILES
+==================================================
+Refactor the existing code by moving logic to the appropriate folders.
+
+--- 1. Config Layer (Setup) ---
+ACTION: Create `server/config/db.js`
+   - Move the MongoDB connection logic from server.js/index.js to this file.
+ACTION: Create `server/config/cloudinary.js`
+   - Move Cloudinary configuration logic here.
+
+--- 2. Models Layer (Database) ---
+ENSURE: All Mongoose schemas are in `server/models/`.
+   - User.js
+   - Notification.js
+   - Lesson.js (if applicable)
+
+--- 3. Controllers Layer (Logic) ---
+ACTION: Extract logic from Routes into Controllers.
+   - Create `server/controllers/authController.js`:
+     - Move logic for 'register', 'login', 'getMe', 'updateProfile' here.
+   - Create `server/controllers/notificationController.js`:
+     - Ensure logic for 'getNotifications', 'createNotification', 'markRead' is here.
+
+--- 4. Routes Layer (Endpoints) ---
+ACTION: Keep only Route definitions in `server/routes/`.
+   - Update `server/routes/authRoutes.js`:
+     - Import functions from `authController`.
+     - Example: router.post('/login', authController.loginUser);
+   - Update `server/routes/notificationRoutes.js`:
+     - Import functions from `notificationController`.
+
+--- 5. Middleware Layer (Protection) ---
+ENSURE: `server/middleware/authMiddleware.js` exists.
+   - Contains the `protect` function (JWT verification).
+
+--- 6. Utils Layer (Helpers) ---
+ACTION: Create `server/utils/generateToken.js`
+   - Move the JWT token generation function here.
+
+==================================================
+PHASE 3: CLEANUP ENTRY POINT (server.js)
+==================================================
+Update `server/server.js` (or index.js):
+1. Import `connectDB` from `./config/db`.
+2. Clean up imports.
+3. Use routes cleanly:
+   - app.use('/api/auth', require('./routes/authRoutes'));
+   - app.use('/api/notifications', require('./routes/notificationRoutes'));
+
+==================================================
+FINAL CHECKLIST
+==================================================
+- [ ] Is logic separated from routes? (Controllers created?)
+- [ ] Is configuration separated? (Config folder used?)
+- [ ] Does server.js look clean and short?

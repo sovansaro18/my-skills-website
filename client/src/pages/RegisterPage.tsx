@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BeatLoader } from "react-spinners";
 import { User, Mail, Lock, Eye, EyeOff, ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../components/contexts/AuthContext';
 
 interface RegisterPageProps {
   onExit: () => void;
@@ -23,14 +23,14 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
   
   const { register } = useAuth();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    setError('');
-    setSuccess('');
-  };
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+        setError('');
+        setSuccess('');
+    }
 
   const validateForm = (): boolean => {
     if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {

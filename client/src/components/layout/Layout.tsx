@@ -4,8 +4,8 @@ import {
   ShieldCheck, MessageCircle, Moon, Sun, LayoutDashboard, 
   User, LogOut, LogIn, UserPlus, Settings // 👈 ១. បានបន្ថែម Settings icon
 } from 'lucide-react';
-import { AppView } from '../types';
-import { useAuth } from '../components/contexts/AuthContext';
+import { AppView } from '../../types';
+import { useAuth } from '../contexts/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
 
 interface LayoutProps {
