@@ -2,41 +2,37 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const protect = async (req, res, next) => {
-  let token;
-
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    try {
-      // ១. យក Token ចេញពី "Bearer <token>"
-      token = req.headers.authorization.split(' ')[1];
-
-      // 🛡️ ២. ការពារកុំឱ្យ Error "jwt malformed" (សំខាន់ណាស់!)
-      // ជួនកាល Frontend ផ្ញើមកជាអក្សរ "null" ឬ "undefined"
-      if (!token || token === "null" || token === "undefined") {
-         return res.status(401).json({ success: false, message: 'Not authorized, invalid token' });
-      }
-
-      // ៣. ពិនិត្យ Token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // ៤. រក User ក្នុង Database
-      // ⚠️ ខ្ញុំដាក់ទាំងពីរ (id និង userId) ដើម្បីឱ្យប្រាកដថាវារកឃើញ ទោះបងបង្កើត Token របៀបណាក៏ដោយ
-      req.user = await User.findById(decoded.id || decoded.userId).select('-password');
-
-      if (!req.user) {
-        return res.status(401).json({ success: false, message: 'Not authorized, user not found' });
-      }
-
-      next();
-    } catch (error) {
-      console.error("Middleware Error:", error.message);
-      // ផ្ញើ 401 ទៅវិញ កុំឱ្យ Server គាំង
-      res.status(401).json({ success: false, message: 'Not authorized, token failed' });
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'គ្មាន token ការអនុញ្ញាត' 
+      });
     }
-  } else {
-    res.status(401).json({ success: false, message: 'Not authorized, no token' });
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'រកមិនឃើញអ្នកប្រើប្រាស់' 
+      });
+    }
+
+    req.user = user;
+    next();
+
+  } catch (error) {
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ success: false, message: 'Token មិនត្រឹមត្រូវ' });
+    }
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ success: false, message: 'Token បានផុតកំណត់' });
+    }
+    return res.status(401).json({ success: false, message: 'បរាជ័យក្នុងការផ្ទៀងផ្ទាត់' });
   }
 };
 

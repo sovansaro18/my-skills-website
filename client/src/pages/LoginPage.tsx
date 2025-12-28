@@ -58,7 +58,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onExit, onSwitchToRegister }) => 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div>
-                  <img src="/assets/MS.png" alt="Logo" className="w-12 h-12" />
+                  <img src="/assets/logo/MS.png" alt="Logo" className="w-12 h-12" />
                 </div>
                 <div>
                   <h1 className="text-xl font-bold font-khmer">MY SKILLS</h1>

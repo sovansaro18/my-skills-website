@@ -1,9 +1,10 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
-const cloudinary = require('../config/cloudinary');
+const cloudinary = require('../config/cloudinary'); // ត្រូវប្រាកដថា file config នេះមាន
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 
+// ១. កំណត់ការផ្ទុក Cloudinary សម្រាប់ Update Profile (ប្រើ Multer)
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -13,20 +14,49 @@ const storage = new CloudinaryStorage({
 });
 const upload = multer({ storage: storage });
 
-// Register
+// ================= REGISTER (កែសម្រួលថ្មី) =================
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, avatar } = req.body;
+
     if (!name || !email || !password) {
       return res.status(400).json({ success: false, message: 'សូមបំពេញរាល់ព័ត៌មាន' });
     }
+
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
       return res.status(400).json({ success: false, message: 'អ៊ីមែលនេះបានប្រើរួចហើយ' });
     }
-    const user = new User({ name, email: email.toLowerCase(), password });
+
+    let avatarUrl = "";
+
+    // ✅ ចំណុចសំខាន់៖ Upload Base64 ទៅ Cloudinary
+    if (avatar) {
+      try {
+        const uploadResponse = await cloudinary.uploader.upload(avatar, {
+          folder: 'my-skills-avatars',
+          resource_type: 'image'
+        });
+        // យក Link រូបភាពពី Cloudinary មកប្រើ
+        avatarUrl = uploadResponse.secure_url; 
+      } catch (uploadError) {
+        console.error("Cloudinary Upload Error:", uploadError);
+        // បើ Upload មិនកើត អាចទុកជាអក្សរទទេ ឬដាក់រូប Default
+      }
+    }
+
+    // បង្កើត User ថ្មីដោយប្រើ Link រូបភាព (មិនមែន Base64 ទេ)
+    const user = new User({ 
+        name, 
+        email: email.toLowerCase(), 
+        password,
+        avatar: avatarUrl 
+    });
+
     await user.save();
+    
     const token = generateToken(user._id);
+
     res.status(201).json({
       success: true,
       message: 'ចុះឈ្មោះជោគជ័យ!',
@@ -48,22 +78,27 @@ const register = async (req, res) => {
   }
 };
 
-// Login
+// ================= LOGIN (ទុកដដែល) =================
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     if (!email || !password) {
       return res.status(400).json({ success: false, message: 'សូមបំពេញអ៊ីមែលនិងពាក្យសម្ងាត់' });
     }
+
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(401).json({ success: false, message: 'អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ' });
     }
+
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       return res.status(401).json({ success: false, message: 'អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ' });
     }
+
     const token = generateToken(user._id);
+
     res.json({
       success: true,
       message: 'ចូលគណនីជោគជ័យ!',
@@ -86,7 +121,7 @@ const login = async (req, res) => {
   }
 };
 
-// Get current user
+// ================= GET CURRENT USER (ទុកដដែល) =================
 const getMe = async (req, res) => {
   res.json({
     success: true,
@@ -94,21 +129,27 @@ const getMe = async (req, res) => {
   });
 };
 
-// Update profile
+// ================= UPDATE PROFILE (ទុកដដែល) =================
 const updateProfile = async (req, res) => {
   try {
     const user = req.user;
     const { name, email, password } = req.body;
+
     if (name) user.name = name;
     if (email) user.email = email.toLowerCase();
+    
     if (password && password.trim() !== '') {
       user.password = password;
     }
+
+    // ប្រើ req.file ពី Multer Middleware
     if (req.file) {
       user.avatar = req.file.path;
     }
+
     const updatedUser = await user.save();
     const token = generateToken(updatedUser._id);
+
     res.json({
       success: true,
       message: 'ព័ត៌មានត្រូវបានកែប្រែជោគជ័យ',
@@ -130,25 +171,29 @@ const updateProfile = async (req, res) => {
   }
 };
 
-// Logout
+// ================= LOGOUT =================
 const logout = (req, res) => {
   res.json({ success: true, message: 'ចាកចេញជោគជ័យ' });
 };
 
-// Toggle save lesson
+// ================= TOGGLE SAVE LESSON =================
 const toggleSaveLesson = async (req, res) => {
   try {
     const { courseId, moduleId, lessonId, title } = req.body;
     const user = req.user;
+
     const existingIndex = user.savedLessons.findIndex(
       item => item.lessonId === lessonId && item.courseId === courseId
     );
+
     if (existingIndex > -1) {
       user.savedLessons.splice(existingIndex, 1);
     } else {
       user.savedLessons.push({ courseId, moduleId, lessonId, title });
     }
+
     await user.save();
+
     res.json({
       success: true,
       savedLessons: user.savedLessons,

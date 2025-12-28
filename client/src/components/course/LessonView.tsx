@@ -111,7 +111,7 @@ const LessonView: React.FC<LessonViewProps> = ({
       {/* 2. VIDEO PLAYER SECTION (កែសម្រួលសម្រាប់ PC & Background) */}
       {/* bg-white: ដាក់ផ្ទៃខាងក្រោយពណ៌ស */}
       {/* py-4: ដាក់គម្លាតលើក្រោមបន្តិចសម្រាប់ PC */}
-      <div className="w-full bg-white shrink-0 relative z-10 flex justify-center py-0 md:py-6">
+      <div className="w-full bg-white dark:bg-slate-950 shrink-0 relative z-10 flex justify-center py-0 md:py-6">
         
         {/* max-w-4xl: កំណត់ទទឹងវីដេអូឲ្យតូចជាងមុន (ពីមុន 5xl) */}
         {/* rounded-xl & border: ដាក់គែម និងកោងឲ្យស្អាតពេលនៅលើផ្ទៃស */}
