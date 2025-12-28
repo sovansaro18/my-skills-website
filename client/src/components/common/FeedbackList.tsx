@@ -205,7 +205,7 @@ const FeedbackList: React.FC = () => {
             <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden">
                 <div className="p-4 bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-700">
                     <h3 className="font-bold text-base text-slate-800 dark:text-white font-khmer flex items-center gap-2">
-                        <Sparkles size={16} className="text-yellow-500" /> មតិ និងការវាយតម្លៃ
+                      មតិ និងការវាយតម្លៃ
                     </h3>
                 </div>
                 

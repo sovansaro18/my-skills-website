@@ -130,7 +130,6 @@ const App: React.FC = () => {
     if (!selectedCourse || !selectedModule || !selectedLesson || !user) return;
     try {
       const token = localStorage.getItem("token");
-      // ត្រូវប្រាកដថា API URL ត្រឹមត្រូវ
       const res = await fetch("http://localhost:5000/api/auth/toggle-save-lesson", { 
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -179,14 +178,25 @@ const App: React.FC = () => {
         ))}
       </div>
 
-      {/* User Info */}
+{/* User Info */}
       {user && (
-        <div className="bg-slate-50 text-slate-800 dark:bg-slate-800 dark:text-slate-100 rounded-2xl p-6 shadow-md flex justify-between items-center">
+        <div 
+          onClick={() => setCurrentView(AppView.PROFILE)} // 👈 ១. ដាក់មុខងារចុចត្រង់នេះ
+          className="bg-slate-50 text-slate-800 dark:bg-slate-800 dark:text-slate-100 rounded-2xl p-6 shadow-md flex justify-between items-center cursor-pointer hover:shadow-lg transition-all" // 👈 ២. ដាក់ cursor-pointer និង effect ពេលដាក់ Mouse ពីលើ
+        >
           <div>
             <h2 className="text-xl font-bold font-khmer">សួស្តី, {user.name}!</h2>
-            <p className="font-khmer mt-1 text-slate-500 dark:text-slate-200">សូមស្វាគមន៍មកកាន់វគ្គសិក្សារបស់អ្នក។</p>
+            <p className="font-khmer mt-1 text-slate-500 dark:text-slate-200">
+                ចុចទីនេះ ដើម្បីមើលឬកែប្រែគណនីរបស់អ្នក។ {/* 👈 ៣. កែអក្សរប្រាប់គេបន្តិច */}
+            </p>
           </div>
-          <div className="bg-white/20 p-2 rounded-full"><img src={user.avatar || DEFAULT_AVATAR} className="w-10 h-10 rounded-full border-2 border-white/50" /></div>
+          <div className="bg-white/20 p-2 rounded-full">
+            <img 
+                src={user.avatar || DEFAULT_AVATAR} 
+                className="w-10 h-10 rounded-full border-2 border-white/50 object-cover" 
+                alt="User Avatar"
+            />
+          </div>
         </div>
       )}
 
