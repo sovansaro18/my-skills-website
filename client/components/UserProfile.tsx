@@ -3,7 +3,6 @@ import { User, Mail, Lock, Save, Camera, CheckCircle, AlertCircle, X } from 'luc
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../utils/cropImage';
 import { useAuth } from './contexts/AuthContext';
-
 interface UserProfileProps {
   onExit: () => void;
 }

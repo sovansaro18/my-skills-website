@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { 
   Menu, Keyboard, Github, UserCircle, ChevronDown, Bookmark, Mail, Info, Facebook, 
   ShieldCheck, MessageCircle, Moon, Sun, LayoutDashboard, 
-  User, LogOut, LogIn, UserPlus 
+  User, LogOut, LogIn, UserPlus, Settings // 👈 ១. បានបន្ថែម Settings icon
 } from 'lucide-react';
 import { AppView } from '../types';
-import { BsFiletypeExe } from 'react-icons/bs';
 import { useAuth } from '../components/contexts/AuthContext';
+import NotificationDropdown from './NotificationDropdown';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -20,14 +20,13 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
   const { user, logout } = useAuth();
   const [isAuthMenuOpen, setIsAuthMenuOpen] = useState(false);
 
-  const LOGO_URL = "/assets/MS.png";
+  const LOGO_URL = "/assets/logo/MS.png";
   const FALLBACK_AVATAR = "/Avatar.png";
   const userAvatar = user?.avatar || FALLBACK_AVATAR;
 
   const navItems = [
     { view: AppView.DASHBOARD, label: 'វគ្គសិក្សាទាំងអស់', icon: LayoutDashboard },
     { view: AppView.SAVED, label: 'មេរៀនដែលបានរក្សាទុក', icon: Bookmark, requireAuth: true },
-    { view: AppView.EXERCISES, label: 'លំហាត់អនុវត្ត', icon: BsFiletypeExe },
     { view: AppView.SHORTCUTS, label: 'Shortcut Keys', icon: Keyboard },
     { view: AppView.ABOUT, label: 'អំពីយើងខ្ញុំ', icon: Info },
   ];
@@ -130,13 +129,23 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
                 );
               })}
 
-              {user && (
-                <NavItem 
-                  icon={User} 
-                  label="គណនីរបស់ខ្ញុំ" 
-                  isActive={currentView === AppView.PROFILE}
-                  onClick={() => { onNavigate(AppView.PROFILE); setIsSidebarOpen(false); }} 
-                />
+                {user && user.role === 'admin' && (
+                  <>
+                    <NavItem 
+                      icon={Settings} 
+                      label="Admin Panel (គ្រប់គ្រង)" 
+                      isActive={currentView === AppView.ADMIN}
+                      onClick={() => { onNavigate(AppView.ADMIN); setIsSidebarOpen(false); }}
+                      className="mt-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 hover:bg-blue-100" 
+                    />
+
+                  <NavItem 
+                    icon={User} 
+                    label="គណនីរបស់ខ្ញុំ" 
+                    isActive={currentView === AppView.PROFILE}
+                    onClick={() => { onNavigate(AppView.PROFILE); setIsSidebarOpen(false); }} 
+                  />
+                </>
               )}
             </div>
           </div>
@@ -213,18 +222,19 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
             <h2 className="text-lg font-bold text-slate-800 dark:text-white font-khmer tracking-wide">
               {currentView === AppView.DASHBOARD ? 'ផ្ទាំងគ្រប់គ្រង' :
                currentView === AppView.SHORTCUTS ? 'ឧបករណ៍ជំនួយ' : 
-               currentView === AppView.EXERCISES ? 'លំហាត់អនុវត្ត' :
                currentView === AppView.QUIZ ? 'ការប្រឡង' : 
                currentView === AppView.COURSE_DETAIL ? 'ព័ត៌មានវគ្គសិក្សា' : 
                currentView === AppView.LOGIN ? 'ចូលគណនី' :
                currentView === AppView.REGISTER ? 'ចុះឈ្មោះ' : 
                currentView === AppView.SAVED ? 'មេរៀនដែលបានរក្សាទុក' :
                currentView === AppView.ABOUT ? 'អំពីយើងខ្ញុំ' : 
-               currentView === AppView.PROFILE ? 'គណនីរបស់ខ្ញុំ' : 'កំពុងសិក្សា'}
+               currentView === AppView.PROFILE ? 'គណនីរបស់ខ្ញុំ' : 
+               currentView === AppView.ADMIN ? 'Admin Panel' : 'កំពុងសិក្សា'} 
             </h2>
           </div>
 
-<div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <NotificationDropdown />
             {user ? (
               <a
                 href="https://t.me/sovansaro"

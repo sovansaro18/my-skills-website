@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  PlayCircle, Bookmark, ChevronRight, ChevronLeft, Home
-   , FileText, List, BookOpen 
+  Bookmark, ChevronRight, ChevronLeft, Home, PlayCircle,
+  ArrowLeft, BookOpen 
 } from "lucide-react";
 import { Course, Module, Lesson } from "../types";
 import HomeworkSubmission from './HomeworkSubmission';
@@ -79,15 +79,15 @@ const LessonView: React.FC<LessonViewProps> = ({
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-screen flex flex-col bg-white dark:bg-slate-950 font-sans overflow-hidden transition-colors">
       
-      <div className="h-16 bg-red-900 text-white flex items-center px-3 justify-between shrink-0 shadow-md z-20">
+      <div className="h-16 bg-red-900 text-white flex items-center px-4 justify-between shrink-0 shadow-md z-20">
+
         <div className="flex items-center gap-2">
           <button 
-            onClick={onExit} 
-            className="p-2 rounded-full hover:bg-white/20 transition-colors"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          
+          onClick={onExit} 
+          className="p-2 rounded-full hover:bg-white/20 transition-colors"
+        >
+          <ArrowLeft size={24} />
+        </button>
           <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center overflow-hidden border border-white/20">
             <img 
               src="/assets/logo/c-learning.png" 
@@ -95,7 +95,6 @@ const LessonView: React.FC<LessonViewProps> = ({
               className="w-full h-full object-cover"
             />
           </div>
-          
           <h1 className="text-lg font-bold font-khmer tracking-wide">MY SKILLS</h1>
         </div>
 
@@ -109,20 +108,33 @@ const LessonView: React.FC<LessonViewProps> = ({
         )}
       </div>
 
-      <div className="w-full bg-black shrink-0 relative z-10 flex justify-center">
-        <div className="w-full md:max-w-4xl lg:max-w-5xl aspect-video bg-black relative shadow-lg">
+      {/* 2. VIDEO PLAYER SECTION (កែសម្រួលសម្រាប់ PC & Background) */}
+      {/* bg-white: ដាក់ផ្ទៃខាងក្រោយពណ៌ស */}
+      {/* py-4: ដាក់គម្លាតលើក្រោមបន្តិចសម្រាប់ PC */}
+      <div className="w-full bg-white shrink-0 relative z-10 flex justify-center py-0 md:py-6">
+        
+        {/* max-w-4xl: កំណត់ទទឹងវីដេអូឲ្យតូចជាងមុន (ពីមុន 5xl) */}
+        {/* rounded-xl & border: ដាក់គែម និងកោងឲ្យស្អាតពេលនៅលើផ្ទៃស */}
+        <div className="w-full md:max-w-3xl lg:max-w-4xl aspect-video bg-black relative shadow-xl md:rounded-xl overflow-hidden md:border border-slate-200">
             {videoUrl ? (
                 embedUrl ? (
-                    <iframe src={embedUrl} title="Lesson Video" className="w-full h-full" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                    <iframe 
+                        src={embedUrl} 
+                        title="Lesson Video" 
+                        className="w-full h-full" 
+                        frameBorder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowFullScreen
+                    ></iframe>
                 ) : (
-                    <video controls className="w-full h-full object-contain">
+                    <video controls className="w-full h-full object-contain bg-black">
                         <source src={videoUrl} type="video/mp4" />
                         Browser របស់អ្នកមិនគាំទ្រវីដេអូនេះទេ។
                     </video>
                 )
             ) : (
-                <div className="w-full h-full flex items-center justify-center text-slate-500 text-sm">
-                    <span>មិនមានវីដេអូ</span>
+                <div className="w-full h-full flex items-center justify-center text-slate-500 text-sm bg-slate-100">
+                    <span>មកដល់ឆាប់ៗនេះ!</span>
                 </div>
             )}
         </div>
@@ -214,7 +226,7 @@ const LessonView: React.FC<LessonViewProps> = ({
         </div>
       </div>
 
-      {/* 4. FOOTER ) */}
+      {/* 4. FOOTER (Fixed Bottom - Red Background) */}
       <div className="h-16 bg-red-900 text-white flex items-center justify-between px-6 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-20">
         <button 
             onClick={() => onNavigate("prev")} 
@@ -222,7 +234,7 @@ const LessonView: React.FC<LessonViewProps> = ({
             className={`flex items-center gap-2 font-bold font-khmer transition-opacity ${!hasPrev ? 'opacity-30 cursor-not-allowed' : 'opacity-100 hover:opacity-80'}`}
         >
             <ChevronLeft size={24} />
-            <span>ត្រលប់</span>
+            <span>មេរៀនមុន</span>
         </button>
 
         <div className="h-8 w-[1px] bg-white/20"></div>
@@ -232,7 +244,7 @@ const LessonView: React.FC<LessonViewProps> = ({
             disabled={!hasNext}
             className={`flex items-center gap-2 font-bold font-khmer transition-opacity ${!hasNext ? 'opacity-30 cursor-not-allowed' : 'opacity-100 hover:opacity-80'}`}
         >
-            <span>បន្ទាប់</span>
+            <span>មេរៀនបន្ទាប់</span>
             <ChevronRight size={24} />
         </button>
       </div>

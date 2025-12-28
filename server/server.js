@@ -5,6 +5,8 @@ const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const feedbackRoutes = require('./routes/feedback');
+const notificationRoutes = require('./routes/notificationRoutes');
+
 
 const app = express();
 
@@ -44,6 +46,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.use('/api/auth', authRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({

@@ -3,7 +3,6 @@ import { BeatLoader } from "react-spinners";
 import Layout from "./components/Layout";
 import CourseCard from "./components/CourseCard";
 import ShortcutGuide from "./components/ShortcutGuide";
-import ExerciseLibrary from "./components/ExerciseLibrary";
 import LoginPage from "./components/pages/LoginPage";
 import RegisterPage from "./components/pages/RegisterPage";
 import { COURSES } from "./constants";
@@ -15,7 +14,7 @@ import FeedbackList from "./components/FeedbackList";
 import AboutUs from "./components/AboutUs";
 import SavedLessons from "./components/SavedLessons";
 import LessonView from "./components/LessonView";
-
+import AdminPage from "./components/pages/AdminPage";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 
 const App: React.FC = () => {
@@ -218,7 +217,6 @@ if (currentView === AppView.LOGIN) {
     return <RegisterPage onExit={() => setCurrentView(AppView.DASHBOARD)} onSwitchToLogin={() => setCurrentView(AppView.LOGIN)} />;
   }
 
-  // ✅ ករណីរៀនមេរៀន (ពេញអេក្រង់ អត់មាន Navbar)
   if (currentView === AppView.LESSON && selectedLesson && selectedCourse && selectedModule) {
     return (
       <>
@@ -256,10 +254,10 @@ if (currentView === AppView.LOGIN) {
           <AnimatePresence mode="wait">
             {currentView === AppView.DASHBOARD && renderDashboard()}
             {currentView === AppView.SHORTCUTS && <ShortcutGuide onExit={goBack} />}
-            {currentView === AppView.EXERCISES && <ExerciseLibrary onExit={goBack} />}
             {currentView === AppView.PROFILE && <UserProfile onExit={goBack} />}
             {currentView === AppView.ABOUT && <AboutUs />}
             {currentView === AppView.SAVED && <SavedLessons onNavigate={setCurrentView} onPlayLesson={handlePlaySavedLesson} />}
+            {currentView === AppView.ADMIN && <AdminPage onExit={goBack} />}
           </AnimatePresence>
         </Layout>
 

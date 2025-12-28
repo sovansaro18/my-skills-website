@@ -10,6 +10,7 @@ export enum AppView {
   PROFILE = 'PROFILE',
   ABOUT = 'ABOUT',
   SAVED = 'SAVED',
+  ADMIN = 'admin'
 }
 
 export interface SavedLesson {

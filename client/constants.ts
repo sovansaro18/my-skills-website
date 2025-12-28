@@ -90,7 +90,7 @@ const WORD_MODULES: Module[] = [
         title: '១. និយមន័យនៃ Microsoft Word',
         content: Lessons.WORD_LESSON_1,
         durationMinutes: 15,
-        videoUrl: 'https://res.cloudinary.com/dzivaqghe/video/upload/v1766860601/Video1_1_eqqmgj.mp4'
+        videoUrl: 'https://res.cloudinary.com/dzivaqghe/video/upload/v1766926891/Introduction_bittzw.mp4'
       },
      {
         id: 'word-lesson-2',
