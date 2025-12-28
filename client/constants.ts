@@ -89,7 +89,8 @@ const WORD_MODULES: Module[] = [
         id: 'word-lesson-1',
         title: '១. និយមន័យនៃ Microsoft Word',
         content: Lessons.WORD_LESSON_1,
-        durationMinutes: 15
+        durationMinutes: 15,
+        videoUrl: 'https://res.cloudinary.com/dzivaqghe/video/upload/v1766860601/Video1_1_eqqmgj.mp4'
       },
      {
         id: 'word-lesson-2',
@@ -243,7 +244,7 @@ const EXCEL_MODULES: Module[] = [
         id: 'excel-lesson-1',
         title: '១. ការណែនាំ និងស្គាល់ Interface',
         content: Lessons.EXCEL_LESSON_1,
-        durationMinutes: 15
+        durationMinutes: 15,
       },
       {
         id: 'excel-lesson-2',

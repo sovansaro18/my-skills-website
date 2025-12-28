@@ -74,6 +74,7 @@ export interface Lesson {
   title: string;
   content: string;
   durationMinutes: number;
+  videoUrl?: string; // 👈 បន្ថែមបន្ទាត់នេះ
 }
 
 export interface ChatMessage {
@@ -90,3 +91,4 @@ export interface QuizQuestion {
   correctAnswerIndex: number;
   explanation: string;
 }
+
