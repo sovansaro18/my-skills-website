@@ -60,6 +60,8 @@ export interface Course {
 	imageUrl: string;
 	color: string;
 	modules: Module[];
+	price: number;    
+	thumbnail: string; 
 }
 
 export interface Module {

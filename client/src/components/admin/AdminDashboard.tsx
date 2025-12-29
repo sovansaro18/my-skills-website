@@ -4,10 +4,9 @@ import {
   Search, Plus, MoreVertical, Trash2, Edit 
 } from 'lucide-react';
 
-// 👇 1. Import Component ផ្ញើដំណឹងឱ្យត្រូវឈ្មោះ file (ស្ថិតក្នុង folder ជាមួយគ្នា ./ )
 import AdminNotificationSender from './AdminNotificationSender'; 
 import CourseCreateForm from './CourseCreateForm';
-
+import AdminCourseList from './AdminCourseList';
 
 const OverviewTab = () => (
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -62,6 +61,7 @@ const UsersTab = () => (
 const CoursesTab = () => (
   <div className="max-w-3xl mx-auto">
     <CourseCreateForm />
+    <AdminCourseList />
   </div>
 );
 

@@ -86,7 +86,7 @@ const CourseCreateForm: React.FC = () => {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 font-khmer focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+            className="w-full p-3 rounded-xl border text-slate-700 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 font-khmer focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
             placeholder="ឧ. រៀនសរសេរកូដ React បឋម"
             required
           />
@@ -100,7 +100,7 @@ const CourseCreateForm: React.FC = () => {
             value={formData.description}
             onChange={handleChange}
             rows={4}
-            className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 font-khmer focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+            className="w-full p-3 rounded-xl border text-slate-700 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 font-khmer focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
             placeholder="សរសេរលម្អិតអំពីវគ្គសិក្សានេះ..."
             required
           />

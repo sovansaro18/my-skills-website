@@ -15,27 +15,19 @@ import SavedLessons from "./components/course/SavedLessons";
 import LessonView from "./components/course/LessonView";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import { useAuth } from "./components/contexts/AuthContext"; 
-import { COURSES } from "./constants";
+// ❌ លុប COURSES ចេញពី constants ហើយ
 import { Course, Module, Lesson, AppView } from "./types";
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<AppView>(() => (localStorage.getItem("currentView") as AppView) || AppView.DASHBOARD);
   
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(() => {
-    const id = localStorage.getItem("courseId");
-    return COURSES.find((c) => c.id === id) || null;
-  });
-  const [selectedModule, setSelectedModule] = useState<Module | null>(() => {
-    const id = localStorage.getItem("moduleId");
-    const course = COURSES.find((c) => c.id === localStorage.getItem("courseId"));
-    return course?.modules.find((m) => m.id === id) || null;
-  });
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(() => {
-    const id = localStorage.getItem("lessonId");
-    const course = COURSES.find((c) => c.id === localStorage.getItem("courseId"));
-    const module = course?.modules.find((m) => m.id === localStorage.getItem("moduleId"));
-    return module?.lessons.find((l) => l.id === id) || null;
-  });
+  // State សម្រាប់ទុកវគ្គសិក្សាពី Database
+  const [courses, setCourses] = useState<Course[]>([]);
+
+  // ចាប់ផ្តើមដោយ null សិន (ចាំ courses មកដល់ ចាំយើង restore តាមក្រោយ)
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [selectedModule, setSelectedModule] = useState<Module | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [minLoading, setMinLoading] = useState(true);
@@ -51,6 +43,61 @@ const App: React.FC = () => {
     "https://res.cloudinary.com/dzivaqghe/image/upload/v1766850791/slide4_eju0e6.png",
   ];
 
+  // ១. ទាញទិន្នន័យពី API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const res = await fetch('https://my-skills-api.onrender.com/api/courses'); 
+        const data = await res.json();
+
+        if (data.success) {
+          const dbCourses = data.data.map((course: any) => ({
+            ...course,
+            id: course._id, 
+            imageUrl: course.thumbnail,
+            modules: course.modules || [] 
+          }));
+          
+          setCourses(dbCourses);
+        } else {
+            setCourses([]); // បើអត់មានទិន្នន័យ ដាក់ទទេ
+        }
+      } catch (error) {
+        console.error("Failed to fetch courses:", error);
+        setCourses([]); // បើ Error ដាក់ទទេ (លែងប្រើ Static Data ហើយ)
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  // ២. Restore Session (ពេល courses មកដល់ សូមឆែកមើល localStorage តើគេរៀនដល់ណា?)
+  useEffect(() => {
+    if (courses.length > 0 && !selectedCourse) {
+        const savedCourseId = localStorage.getItem("courseId");
+        const savedModuleId = localStorage.getItem("moduleId");
+        const savedLessonId = localStorage.getItem("lessonId");
+
+        if (savedCourseId) {
+            const foundCourse = courses.find(c => c.id === savedCourseId);
+            if (foundCourse) {
+                setSelectedCourse(foundCourse);
+                
+                if (savedModuleId) {
+                    const foundModule = foundCourse.modules.find(m => m.id === savedModuleId);
+                    setSelectedModule(foundModule || null);
+                    
+                    if (foundModule && savedLessonId) {
+                        const foundLesson = foundModule.lessons.find(l => l.id === savedLessonId);
+                        setSelectedLesson(foundLesson || null);
+                    }
+                }
+            }
+        }
+    }
+  }, [courses]); // Run ម្ដងទៀតពេល courses ផ្លាស់ប្តូរ (ទាញចប់)
+
+  // Save Session ចូល localStorage ពេលមានការផ្លាស់ប្តូរ
   useEffect(() => {
     if (currentView) localStorage.setItem("currentView", currentView);
     if (selectedCourse) localStorage.setItem("courseId", selectedCourse.id); else localStorage.removeItem("courseId");
@@ -84,15 +131,20 @@ const App: React.FC = () => {
 
   const handleCourseClick = (course: Course) => {
     if (!user) { setCurrentView(AppView.LOGIN); return; }
-    const firstModule = course.modules[0];
-    const firstLesson = firstModule?.lessons[0];
-    if (firstModule && firstLesson) {
-        setSelectedCourse(course);
-        setSelectedModule(firstModule);
-        setSelectedLesson(firstLesson);
-        setCurrentView(AppView.LESSON);
+    
+    if (course.modules && course.modules.length > 0) {
+        const firstModule = course.modules[0];
+        const firstLesson = firstModule?.lessons[0];
+        if (firstModule && firstLesson) {
+            setSelectedCourse(course);
+            setSelectedModule(firstModule);
+            setSelectedLesson(firstLesson);
+            setCurrentView(AppView.LESSON);
+        } else {
+            alert("វគ្គសិក្សានេះមិនទាន់មានមេរៀននៅឡើយទេ!");
+        }
     } else {
-        alert("មិនទាន់មានមេរៀននៅឡើយទេ!");
+        alert("វគ្គសិក្សានេះកំពុងរៀបចំមេរៀន សូមរង់ចាំ!");
     }
   };
 
@@ -116,7 +168,10 @@ const App: React.FC = () => {
 
   const handlePlaySavedLesson = (courseId: string, moduleId: string, lessonId: string) => {
     if (!user) { setCurrentView(AppView.LOGIN); return; }
-    const course = COURSES.find((c) => c.id === courseId);
+    
+    // ប្រើតែ courses ពី Database ប៉ុណ្ណោះ
+    const course = courses.find((c) => c.id === courseId);
+    
     const module = course?.modules.find((m) => m.id === moduleId);
     const lesson = module?.lessons.find((l) => l.id === lessonId);
     if (course && module && lesson) {
@@ -125,7 +180,7 @@ const App: React.FC = () => {
     }
   };
 
-const toggleSaveLesson = async () => {
+  const toggleSaveLesson = async () => {
     if (!selectedCourse || !selectedModule || !selectedLesson || !user) return;
     try {
       const token = localStorage.getItem("token");
@@ -180,7 +235,7 @@ const toggleSaveLesson = async () => {
       {user && (
         <div 
           onClick={() => setCurrentView(AppView.PROFILE)}
-          className="bg-slate-50 text-slate-800 dark:bg-slate-800 dark:text-slate-100 rounded-2xl p-6 shadow-md flex justify-between items-center cursor-pointer hover:shadow-lg transition-all" // 👈 ២. ដាក់ cursor-pointer និង effect ពេលដាក់ Mouse ពីលើ
+          className="bg-slate-50 text-slate-800 dark:bg-slate-800 dark:text-slate-100 rounded-2xl p-6 shadow-md flex justify-between items-center cursor-pointer hover:shadow-lg transition-all"
         >
           <div>
             <h2 className="text-xl font-bold font-khmer">សួស្តី, {user.name}!</h2>
@@ -203,12 +258,19 @@ const toggleSaveLesson = async () => {
           <div className="bg-white dark:bg-slate-800 p-2 rounded-xl text-brand-600 dark:text-brand-400 shadow-sm border border-slate-100 dark:border-slate-700"><BookOpen size={20} /></div>
           <h1 className="text-2xl font-bold text-slate-800 dark:text-white font-khmer">វគ្គសិក្សាដែលមាន</h1>
         </div>
+        
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {COURSES.map((course) => (
-            <motion.div key={course.id} whileHover={{ y: -5 }}>
-              <CourseCard course={course} onClick={() => handleCourseClick(course)} />
-            </motion.div>
-          ))}
+          {courses.length > 0 ? (
+            courses.map((course) => (
+              <motion.div key={course.id} whileHover={{ y: -5 }}>
+                <CourseCard course={course} onClick={() => handleCourseClick(course)} />
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-10 text-slate-500 font-khmer">
+               កំពុងផ្ទុកទិន្នន័យ ឬមិនទាន់មានវគ្គសិក្សា...
+            </div>
+          )}
         </div>
       </div>
 

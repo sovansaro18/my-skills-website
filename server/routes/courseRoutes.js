@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { createCourse, getCourses } = require('../controllers/courseController');
+// 👇 Import មុខងារ Update និង Delete មកផង
+const { createCourse, getCourses, updateCourse, deleteCourse } = require('../controllers/courseController');
 const { protect, admin } = require('../middleware/authMiddleware');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
@@ -15,8 +16,14 @@ const storage = new CloudinaryStorage({
 });
 const upload = multer({ storage: storage });
 
+// Route សម្រាប់ /api/courses
 router.route('/')
   .get(getCourses)
   .post(protect, admin, upload.single('thumbnail'), createCourse);
+
+// 👇 Route ថ្មីសម្រាប់ /api/courses/:id (កែ និង លុប)
+router.route('/:id')
+  .put(protect, admin, upload.single('thumbnail'), updateCourse) // កែប្រែ
+  .delete(protect, admin, deleteCourse); // លុប
 
 module.exports = router;
