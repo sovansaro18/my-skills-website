@@ -4,12 +4,10 @@ import {
   Search, Plus, MoreVertical, Trash2, Edit 
 } from 'lucide-react';
 
-// Import Components
 import AdminNotificationSender from './AdminNotificationSender'; 
 import CourseCreateForm from './CourseCreateForm';
 import AdminCourseList from './AdminCourseList';
 
-// Import Type
 import { Course } from '../../types'; 
 
 const OverviewTab = () => (
@@ -62,12 +60,10 @@ const UsersTab = () => (
   </div>
 );
 
-// 🔥 កែប្រែ CoursesTab ឱ្យមាន Logic គ្រប់គ្រងការ Edit
 const CoursesTab = () => {
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [refreshKey, setRefreshKey] = useState(0); // សម្រាប់ Refresh Table
 
-  // ពេល Create/Edit ជោគជ័យ
   const handleSuccess = () => {
     setRefreshKey(prev => prev + 1); // បង្ខំឱ្យ List ទាញទិន្នន័យថ្មី
     setEditingCourse(null); // ត្រឡប់ទៅ Mode Create វិញ
@@ -75,18 +71,16 @@ const CoursesTab = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      {/* Form: ផ្ញើ editingCourse ទៅឱ្យវា ដើម្បីដឹងថាត្រូវ Edit ឬ Create */}
       <CourseCreateForm 
         courseToEdit={editingCourse} 
         onCancel={() => setEditingCourse(null)}
         onSuccess={handleSuccess}
       />
       
-      {/* List: ទទួលបញ្ជា onEdit ដើម្បីចាប់យកវគ្គដែលចង់កែ */}
       <AdminCourseList 
         onEdit={(course) => {
-          setEditingCourse(course); // ដាក់ទិន្នន័យចូល State
-          window.scrollTo({ top: 0, behavior: 'smooth' }); // រុញទៅលើដើម្បីឱ្យឃើញ Form
+          setEditingCourse(course);
+          window.scrollTo({ top: 0, behavior: 'smooth' }); 
         }}
         refreshKey={refreshKey}
       />
@@ -138,7 +132,6 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Main Content Area */}
       <div className="flex-1 p-6 md:p-8 overflow-y-auto">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
