@@ -108,13 +108,8 @@ const LessonView: React.FC<LessonViewProps> = ({
         )}
       </div>
 
-      {/* 2. VIDEO PLAYER SECTION (កែសម្រួលសម្រាប់ PC & Background) */}
-      {/* bg-white: ដាក់ផ្ទៃខាងក្រោយពណ៌ស */}
-      {/* py-4: ដាក់គម្លាតលើក្រោមបន្តិចសម្រាប់ PC */}
       <div className="w-full bg-white dark:bg-slate-950 shrink-0 relative z-10 flex justify-center py-0 md:py-6">
         
-        {/* max-w-4xl: កំណត់ទទឹងវីដេអូឲ្យតូចជាងមុន (ពីមុន 5xl) */}
-        {/* rounded-xl & border: ដាក់គែម និងកោងឲ្យស្អាតពេលនៅលើផ្ទៃស */}
         <div className="w-full md:max-w-3xl lg:max-w-4xl aspect-video bg-black relative shadow-xl md:rounded-xl overflow-hidden md:border border-slate-200">
             {videoUrl ? (
                 embedUrl ? (
@@ -140,11 +135,9 @@ const LessonView: React.FC<LessonViewProps> = ({
         </div>
       </div>
 
-      {/* 3. SCROLLABLE CONTENT AREA (Middle) */}
       <div className="flex-1 overflow-y-auto scroll-smooth bg-slate-50 dark:bg-slate-950">
         <div className="max-w-4xl mx-auto w-full pb-20">
           
-            {/* Title */}
             <div className="p-4 md:p-6 bg-white dark:bg-slate-900 shadow-sm mb-2">
                 <h1 className="text-lg md:text-2xl font-bold text-slate-900 dark:text-white font-khmer leading-relaxed">
                     {lesson.title}
@@ -155,11 +148,11 @@ const LessonView: React.FC<LessonViewProps> = ({
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-10 shadow-sm">
-                <button onClick={() => setActiveTab('content')} className={`flex-1 py-3 font-khmer font-bold text-sm border-b-2 transition-colors ${activeTab === 'content' ? 'border-red-600 text-red-600' : 'border-transparent text-slate-500'}`}>
+            <div className="flex border-b border-slate-200 dark:border-slate-800 bg-red-900 dark:bg-slate-900 sticky top-0 z-10 shadow-sm">
+                <button onClick={() => setActiveTab('content')} className={`flex-1 py-3 font-khmer font-bold text-sm border-b-2 transition-colors ${activeTab === 'content' ? 'border-red-600 text-white' : 'border-transparent text-white/50'}`}>
                     ខ្លឹមសារមេរៀន
                 </button>
-                <button onClick={() => setActiveTab('outline')} className={`flex-1 py-3 font-khmer font-bold text-sm border-b-2 transition-colors ${activeTab === 'outline' ? 'border-red-600 text-red-600' : 'border-transparent text-slate-500'}`}>
+                <button onClick={() => setActiveTab('outline')} className={`flex-1 py-3 font-khmer font-bold text-sm border-b-2 transition-colors ${activeTab === 'outline' ? 'border-red-600 text-white' : 'border-transparent text-white/50'}`}>
                     មាតិកាវគ្គសិក្សា
                 </button>
             </div>
@@ -226,8 +219,7 @@ const LessonView: React.FC<LessonViewProps> = ({
         </div>
       </div>
 
-      {/* 4. FOOTER (Fixed Bottom - Red Background) */}
-      <div className="h-16 bg-red-900 text-white flex items-center justify-between px-6 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-20">
+      <div className="h-14 md:h-16 bg-red-900 text-white flex items-center justify-between px-4 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-20">
         <button 
             onClick={() => onNavigate("prev")} 
             disabled={!hasPrev}

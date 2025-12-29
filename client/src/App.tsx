@@ -93,7 +93,7 @@ const App: React.FC = () => {
         setSelectedLesson(firstLesson);
         setCurrentView(AppView.LESSON);
     } else {
-        alert("វគ្គសិក្សានេះមិនទាន់មានមេរៀននៅឡើយទេ");
+        alert("មិនទាន់មានមេរៀននៅឡើយទេ!");
     }
   };
 
