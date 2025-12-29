@@ -8,13 +8,12 @@ import CourseCard from "./components/course/CourseCard";
 import ShortcutGuide from "./pages/ShortcutGuide";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import AdminPage from "./pages/AdminPage";
 import UserProfile from "./pages/UserProfile";
 import AboutUs from "./pages/AboutUs";
 import FeedbackList from "./components/common/FeedbackList"; 
 import SavedLessons from "./components/course/SavedLessons";
 import LessonView from "./components/course/LessonView";
-
+import AdminDashboard from "./components/admin/AdminDashboard";
 import { useAuth } from "./components/contexts/AuthContext"; 
 import { COURSES } from "./constants";
 import { Course, Module, Lesson, AppView } from "./types";
@@ -265,7 +264,7 @@ const toggleSaveLesson = async () => {
             {currentView === AppView.PROFILE && <UserProfile onExit={goBack} />}
             {currentView === AppView.ABOUT && <AboutUs />}
             {currentView === AppView.SAVED && <SavedLessons onNavigate={setCurrentView} onPlayLesson={handlePlaySavedLesson} />}
-            {currentView === AppView.ADMIN && <AdminPage onExit={goBack} />}
+            {currentView === AppView.ADMIN && <AdminDashboard />}
           </AnimatePresence>
         </Layout>
 

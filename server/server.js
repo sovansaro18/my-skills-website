@@ -8,6 +8,8 @@ const authRoutes = require('./routes/authRoutes');
 const feedbackRoutes = require('./routes/feedback');
 const notificationRoutes = require('./routes/notificationRoutes');
 
+const courseRoutes = require('./routes/courseRoutes');
+
 const app = express();
 
 app.use(cors({
@@ -38,6 +40,8 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/courses', courseRoutes);
+
 
 app.get('/api/health', (req, res) => {
   res.json({
@@ -45,7 +49,7 @@ app.get('/api/health', (req, res) => {
     message: 'Server is running',
   });
 });
-
+app.use('/api/courses', courseRoutes);
 app.all(/.*/, (req, res) => {
   res.status(404).json({
     success: false,

@@ -41,39 +41,44 @@ const AdminNotificationSender: React.FC = () => {
     }
   };
 
+  // 👇 កែត្រង់នេះ៖ ដក className ដែលមាន shadow, border, max-w-lg ចេញ
   return (
-    <div className="max-w-lg mx-auto bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 mt-10">
+    <div className="w-full"> 
+      
+      {/* ផ្នែក Title នេះអាចទុក ឬដកចេញក៏បាន ព្រោះនៅ Dashboard មាន Title ម្តងហើយ */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full">
-            <Bell className="text-blue-600 dark:text-blue-400" size={24} />
+        <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <Bell className="text-blue-600 dark:text-blue-400" size={20} />
         </div>
-        <h2 className="text-xl font-bold font-khmer text-slate-800 dark:text-white">បង្កើតការជូនដំណឹង</h2>
+        <h2 className="text-lg font-bold font-khmer text-slate-800 dark:text-white">បង្កើតការជូនដំណឹងថ្មី</h2>
       </div>
 
       <form onSubmit={handleSend} className="space-y-4">
-        <div>
-          <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 font-khmer mb-1">ប្រភេទ</label>
-          <select 
-            value={type} 
-            onChange={(e) => setType(e.target.value)}
-            className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-khmer focus:ring-2 focus:ring-blue-500 outline-none"
-          >
-            <option value="lesson">មេរៀនថ្មី (Lesson)</option>
-            <option value="homework">កិច្ចការផ្ទះ (Homework)</option>
-            <option value="system">ដំណឹងទូទៅ (System)</option>
-          </select>
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 font-khmer mb-1">ប្រភេទ</label>
+            <select 
+                value={type} 
+                onChange={(e) => setType(e.target.value)}
+                className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-khmer focus:ring-2 focus:ring-blue-500 outline-none"
+            >
+                <option value="lesson">មេរៀនថ្មី (Lesson)</option>
+                <option value="homework">កិច្ចការផ្ទះ (Homework)</option>
+                <option value="system">ដំណឹងទូទៅ (System)</option>
+            </select>
+            </div>
 
-        <div>
-          <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 font-khmer mb-1">ចំណងជើង</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="ឧ. មេរៀន Word ថ្មីបានដាក់បញ្ចូលហើយ!"
-            className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-khmer focus:ring-2 focus:ring-blue-500 outline-none"
-            required
-          />
+            <div>
+            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 font-khmer mb-1">ចំណងជើង</label>
+            <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="ឧ. មេរៀន Word ថ្មីបានដាក់បញ្ចូលហើយ!"
+                className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-khmer focus:ring-2 focus:ring-blue-500 outline-none"
+                required
+            />
+            </div>
         </div>
 
         <div>
@@ -95,13 +100,15 @@ const AdminNotificationSender: React.FC = () => {
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold font-khmer flex items-center justify-center gap-2 transition-all disabled:opacity-70"
-        >
-          {loading ? 'កំពុងផ្ញើ...' : <><Send size={18} /> ផ្ញើជូនដំណឹង</>}
-        </button>
+        <div className="flex justify-end mt-2">
+            <button
+            type="submit"
+            disabled={loading}
+            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold font-khmer flex items-center gap-2 transition-all disabled:opacity-70 shadow-lg shadow-blue-500/30"
+            >
+            {loading ? 'កំពុងផ្ញើ...' : <><Send size={18} /> ផ្ញើជូនដំណឹង</>}
+            </button>
+        </div>
       </form>
     </div>
   );
