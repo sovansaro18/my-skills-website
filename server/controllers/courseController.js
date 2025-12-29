@@ -8,7 +8,7 @@ const createCourse = async (req, res) => {
     if (req.file) {
       thumbnail = req.file.path; 
     } else {
-      return res.status(400).json({ success: false, message: 'សូមដាក់រូបភាពតំណាងវគ្គសិក្សា (Thumbnail)' });
+      return res.status(400).json({ success: false, message: 'សូមដាក់រូបភាពតំណាងវគ្គសិក្សា!' });
     }
 
     const course = await Course.create({

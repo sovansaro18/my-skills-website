@@ -15,17 +15,17 @@ const moduleSchema = new mongoose.Schema({
 const courseSchema = new mongoose.Schema({
   title: { 
     type: String, 
-    required: [true, 'សូមដាក់ចំណងជើងវគ្គសិក្សា'],
+    required: [true, 'ចំណងជើងវគ្គសិក្សា'],
     trim: true 
   },
   description: { 
     type: String, 
-    required: [true, 'សូមដាក់ការពិពណ៌នា'] 
+    required: [true, 'ការពិពណ៌នា'] 
   },
   thumbnail: { 
     type: String, 
     required: true,
-    default: 'https://via.placeholder.com/600x400.png?text=No+Image'
+    default: ''
   },
   price: { 
     type: Number, 
