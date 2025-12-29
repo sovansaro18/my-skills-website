@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Edit, Trash2, Video, Loader2, AlertCircle } from 'lucide-react';
+import { Edit, Trash2, Video, Loader2, AlertCircle, List } from 'lucide-react';
 import { Course } from '../../types';
 
-// 👇 ថែម Props សម្រាប់ទទួលបញ្ជា
 interface AdminCourseListProps {
   onEdit: (course: Course) => void;
-  refreshKey: number; // សម្រាប់បង្ខំឱ្យ Refresh តារាង
+  onManageContent: (courseId: string) => void; // 👈 Props ថ្មីសម្រាប់ហៅទៅក្រៅ
+  refreshKey: number;
 }
 
-const AdminCourseList: React.FC<AdminCourseListProps> = ({ onEdit, refreshKey }) => {
+const AdminCourseList: React.FC<AdminCourseListProps> = ({ onEdit, onManageContent, refreshKey }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   const fetchCourses = async () => {
-    setLoading(true); // បង្ហាញ Loading ពេល Refresh
     try {
+      setLoading(true);
       const res = await fetch('https://my-skills-api.onrender.com/api/courses');
       const data = await res.json();
       if (data.success) {
@@ -35,26 +35,29 @@ const AdminCourseList: React.FC<AdminCourseListProps> = ({ onEdit, refreshKey })
     }
   };
 
-  // ពេល refreshKey ប្តូរ (មានន័យថាគេ Create ឬ Edit ចប់) យើងទាញទិន្នន័យម្តងទៀត
   useEffect(() => {
     fetchCourses();
   }, [refreshKey]);
 
-  // Function លុប (រក្សាទុកដដែល)
   const handleDelete = async (id: string) => {
     if (!window.confirm('តើបងពិតជាចង់លុបវគ្គសិក្សានេះមែនទេ?')) return;
+
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`https://my-skills-api.onrender.com/api/courses/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
+
       const data = await res.json();
+
       if (data.success) {
         setCourses(courses.filter(course => course.id !== id));
         alert('បានលុបវគ្គសិក្សាជោគជ័យ!');
       } else {
-        alert(data.message);
+        alert(data.message || 'បរាជ័យក្នុងការលុប');
       }
     } catch (error) {
       alert('មានបញ្ហាក្នុងការភ្ជាប់ទៅ Server');
@@ -66,7 +69,6 @@ const AdminCourseList: React.FC<AdminCourseListProps> = ({ onEdit, refreshKey })
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden mt-8">
-      {/* ... Header (រក្សាទុកដដែល) ... */}
       <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white font-khmer">វគ្គសិក្សាទាំងអស់ ({courses.length})</h3>
         <button onClick={fetchCourses} className="text-sm text-blue-600 hover:underline font-khmer">Refresh</button>
@@ -74,7 +76,6 @@ const AdminCourseList: React.FC<AdminCourseListProps> = ({ onEdit, refreshKey })
 
       <div className="overflow-x-auto">
         <table className="w-full text-left">
-          {/* ... Table Header (រក្សាទុកដដែល) ... */}
           <thead className="bg-slate-50 dark:bg-slate-900/50 text-slate-500 font-khmer text-sm">
             <tr>
               <th className="p-4">វគ្គសិក្សា</th>
@@ -83,7 +84,6 @@ const AdminCourseList: React.FC<AdminCourseListProps> = ({ onEdit, refreshKey })
               <th className="p-4 text-right">សកម្មភាព</th>
             </tr>
           </thead>
-
           <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
             {courses.length > 0 ? (
               courses.map((course) => (
@@ -108,14 +108,23 @@ const AdminCourseList: React.FC<AdminCourseListProps> = ({ onEdit, refreshKey })
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex justify-end gap-2">
-                      {/* 👇 ប៊ូតុង Edit: ហៅ onEdit ពេលចុច */}
+                      {/* 👇 ប៊ូតុងថ្មី៖ គ្រប់គ្រងមេរៀន */}
+                      <button 
+                        className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition" 
+                        title="គ្រប់គ្រងមេរៀន"
+                        onClick={() => onManageContent(course.id)} 
+                      >
+                        <List size={18} />
+                      </button>
+
                       <button 
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" 
                         title="កែប្រែ"
-                        onClick={() => onEdit(course)} 
+                        onClick={() => onEdit(course)}
                       >
                         <Edit size={18} />
                       </button>
+                      
                       <button 
                         onClick={() => handleDelete(course.id)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition" 
@@ -128,7 +137,9 @@ const AdminCourseList: React.FC<AdminCourseListProps> = ({ onEdit, refreshKey })
                 </tr>
               ))
             ) : (
-              <tr><td colSpan={4} className="p-8 text-center text-slate-500">គ្មានទិន្នន័យ</td></tr>
+              <tr>
+                <td colSpan={4} className="p-8 text-center text-slate-500 font-khmer">មិនទាន់មានវគ្គសិក្សាទេ</td>
+              </tr>
             )}
           </tbody>
         </table>

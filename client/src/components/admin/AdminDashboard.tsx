@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { 
   Users, BookOpen, Bell, LayoutDashboard, 
-  Search, Plus, MoreVertical, Trash2, Edit 
 } from 'lucide-react';
 
+// Import Components
 import AdminNotificationSender from './AdminNotificationSender'; 
 import CourseCreateForm from './CourseCreateForm';
 import AdminCourseList from './AdminCourseList';
+import CourseCurriculumManager from './CourseCurriculumManager'; // 👈 Import Component ថ្មី
 
 import { Course } from '../../types'; 
 
@@ -60,30 +61,46 @@ const UsersTab = () => (
   </div>
 );
 
+// 🔥 CoursesTab: គ្រប់គ្រងមុខងារបង្កើត, កែប្រែ និងចាត់ចែងមេរៀន
 const CoursesTab = () => {
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
-  const [refreshKey, setRefreshKey] = useState(0); // សម្រាប់ Refresh Table
+  const [managingCourseId, setManagingCourseId] = useState<string | null>(null); // State សម្រាប់បើក Popup
+  const [refreshKey, setRefreshKey] = useState(0); 
 
   const handleSuccess = () => {
-    setRefreshKey(prev => prev + 1); // បង្ខំឱ្យ List ទាញទិន្នន័យថ្មី
-    setEditingCourse(null); // ត្រឡប់ទៅ Mode Create វិញ
+    setRefreshKey(prev => prev + 1); 
+    setEditingCourse(null); 
   };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
+      {/* 1. Form បង្កើត/កែប្រែ */}
       <CourseCreateForm 
         courseToEdit={editingCourse} 
         onCancel={() => setEditingCourse(null)}
         onSuccess={handleSuccess}
       />
       
+      {/* 2. List តារាងវគ្គសិក្សា */}
       <AdminCourseList 
         onEdit={(course) => {
-          setEditingCourse(course);
-          window.scrollTo({ top: 0, behavior: 'smooth' }); 
+          setEditingCourse(course); 
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
+        onManageContent={(courseId) => setManagingCourseId(courseId)} // 👈 បញ្ជូន ID ពេលចុច
         refreshKey={refreshKey}
       />
+
+      {/* 3. Popup គ្រប់គ្រងមេរៀន (បង្ហាញពេល managingCourseId មានតម្លៃ) */}
+      {managingCourseId && (
+        <CourseCurriculumManager 
+          courseId={managingCourseId}
+          onClose={() => {
+            setManagingCourseId(null);
+            setRefreshKey(prev => prev + 1); // Refresh ពេលបិទ ដើម្បី Update ចំនួនមេរៀន
+          }}
+        />
+      )}
     </div>
   );
 };
@@ -132,6 +149,7 @@ const AdminDashboard = () => {
         </div>
       </div>
 
+      {/* Main Content Area */}
       <div className="flex-1 p-6 md:p-8 overflow-y-auto">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
