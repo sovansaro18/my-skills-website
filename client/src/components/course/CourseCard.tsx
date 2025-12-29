@@ -9,14 +9,16 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
 
-  const totalLessons = course.modules.reduce((acc, module) => acc + module.lessons.length, 0);
+  // គណនាចំនួនមេរៀនសរុប (ការពារករណី modules អត់ទាន់មាន)
+  const totalLessons = course.modules?.reduce((acc, module) => acc + module.lessons.length, 0) || 0;
 
   return (
     <div 
       onClick={onClick}
       className="group bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer flex flex-col h-full relative"
     >
-      <div className={`h-32 md:h-48 ${course.color} relative p-2 md:p-4 flex items-center justify-center overflow-hidden`}>
+      {/* ផ្នែករូបភាព */}
+      <div className={`h-32 md:h-48 ${course.color || 'bg-blue-50'} relative p-2 md:p-4 flex items-center justify-center overflow-hidden`}>
          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-500"></div>
          
          <img 
@@ -32,7 +34,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
         </div>
       </div>
       
-      <div className="p-2 md:p-4 flex-1 flex flex-col">
+      {/* ផ្នែកខ្លឹមសារ */}
+      <div className="p-3 md:p-4 flex-1 flex flex-col">
         <h3 className="text-sm md:text-xl font-bold text-slate-900 dark:text-white mb-1.5 md:mb-2 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors font-khmer line-clamp-1">
             {course.title}
         </h3>
@@ -40,19 +43,33 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onClick }) => {
           {course.description}
         </p>
         
-        <div className="flex items-start md:items-center gap-2 md:gap-4 text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 pt-3 md:pt-4 border-t border-slate-300/70 dark:border-slate-700/50">
+        {/* Footer: បង្ហាញចំនួនមេរៀន និង តម្លៃ */}
+        <div className="flex items-center justify-between pt-3 md:pt-4 border-t border-slate-300/70 dark:border-slate-700/50">
           
-        <div className="flex justify-between items-center gap-1.5 w-full md:w-auto">
-              {/* ផ្នែកចំនួន Module */}
+          {/* ផ្នែកខាងឆ្វេង: ចំនួន Module និង Lesson */}
+          <div className="flex items-center gap-2">
               <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-700/50 px-1.5 py-0.5 md:px-2 md:py-1 rounded-md">
                 <BarChart size={10} className="text-slate-600 dark:text-slate-400 md:w-3 md:h-3" />
-                <span className="text-[9px] md:text-[10px] font-medium font-khmer">{course.modules.length} ផ្នែក</span>
+                <span className="text-[9px] md:text-[10px] font-medium font-khmer text-slate-600 dark:text-slate-400">
+                  {course.modules?.length || 0} ផ្នែក
+                </span>
               </div>
               
               <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-700/50 px-1.5 py-0.5 md:px-2 md:py-1 rounded-md">
                 <BookOpen size={10} className="text-slate-600 dark:text-slate-400 md:w-3 md:h-3" />
-                <span className="text-[9px] md:text-[10px] font-medium font-khmer">{totalLessons} មេរៀន</span>
+                <span className="text-[9px] md:text-[10px] font-medium font-khmer text-slate-600 dark:text-slate-400">
+                  {totalLessons} មេរៀន
+                </span>
               </div>
+          </div>
+
+          {/* ផ្នែកខាងស្តាំ: តម្លៃ */}
+          <div className="font-bold font-khmer text-sm md:text-base">
+            {course.price > 0 ? (
+              <span className="text-blue-600 dark:text-blue-400">${course.price}</span>
+            ) : (
+              <span className="text-green-600 dark:text-green-400">ឥតគិតថ្លៃ</span>
+            )}
           </div>
           
         </div>

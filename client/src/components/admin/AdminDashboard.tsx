@@ -4,9 +4,13 @@ import {
   Search, Plus, MoreVertical, Trash2, Edit 
 } from 'lucide-react';
 
+// Import Components
 import AdminNotificationSender from './AdminNotificationSender'; 
 import CourseCreateForm from './CourseCreateForm';
 import AdminCourseList from './AdminCourseList';
+
+// Import Type
+import { Course } from '../../types'; 
 
 const OverviewTab = () => (
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -58,12 +62,37 @@ const UsersTab = () => (
   </div>
 );
 
-const CoursesTab = () => (
-  <div className="max-w-3xl mx-auto">
-    <CourseCreateForm />
-    <AdminCourseList />
-  </div>
-);
+// 🔥 កែប្រែ CoursesTab ឱ្យមាន Logic គ្រប់គ្រងការ Edit
+const CoursesTab = () => {
+  const [editingCourse, setEditingCourse] = useState<Course | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0); // សម្រាប់ Refresh Table
+
+  // ពេល Create/Edit ជោគជ័យ
+  const handleSuccess = () => {
+    setRefreshKey(prev => prev + 1); // បង្ខំឱ្យ List ទាញទិន្នន័យថ្មី
+    setEditingCourse(null); // ត្រឡប់ទៅ Mode Create វិញ
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-8">
+      {/* Form: ផ្ញើ editingCourse ទៅឱ្យវា ដើម្បីដឹងថាត្រូវ Edit ឬ Create */}
+      <CourseCreateForm 
+        courseToEdit={editingCourse} 
+        onCancel={() => setEditingCourse(null)}
+        onSuccess={handleSuccess}
+      />
+      
+      {/* List: ទទួលបញ្ជា onEdit ដើម្បីចាប់យកវគ្គដែលចង់កែ */}
+      <AdminCourseList 
+        onEdit={(course) => {
+          setEditingCourse(course); // ដាក់ទិន្នន័យចូល State
+          window.scrollTo({ top: 0, behavior: 'smooth' }); // រុញទៅលើដើម្បីឱ្យឃើញ Form
+        }}
+        refreshKey={refreshKey}
+      />
+    </div>
+  );
+};
 
 const NotificationsTab = () => (
   <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -84,6 +113,7 @@ const AdminDashboard = () => {
   return (
     <div className="flex flex-col md:flex-row min-h-[calc(100vh-64px)] bg-slate-50 dark:bg-slate-950">
       
+      {/* Sidebar Menu */}
       <div className="w-full md:w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex-shrink-0">
         <div className="p-4">
           <h2 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-4 font-khmer px-2">

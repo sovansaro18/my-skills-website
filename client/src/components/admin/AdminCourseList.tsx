@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Edit, Trash2, Video, Loader2, AlertCircle } from 'lucide-react';
 import { Course } from '../../types';
 
-const AdminCourseList: React.FC = () => {
+// 👇 ថែម Props សម្រាប់ទទួលបញ្ជា
+interface AdminCourseListProps {
+  onEdit: (course: Course) => void;
+  refreshKey: number; // សម្រាប់បង្ខំឱ្យ Refresh តារាង
+}
+
+const AdminCourseList: React.FC<AdminCourseListProps> = ({ onEdit, refreshKey }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   const fetchCourses = async () => {
+    setLoading(true); // បង្ហាញ Loading ពេល Refresh
     try {
-      // បើបង run localhost សូមប្តូរ link ខាងក្រោមទៅ http://localhost:5000/api/courses
       const res = await fetch('https://my-skills-api.onrender.com/api/courses');
       const data = await res.json();
       if (data.success) {
@@ -29,32 +35,26 @@ const AdminCourseList: React.FC = () => {
     }
   };
 
+  // ពេល refreshKey ប្តូរ (មានន័យថាគេ Create ឬ Edit ចប់) យើងទាញទិន្នន័យម្តងទៀត
   useEffect(() => {
     fetchCourses();
-  }, []);
+  }, [refreshKey]);
 
-  // 👇 មុខងារលុបវគ្គសិក្សា
+  // Function លុប (រក្សាទុកដដែល)
   const handleDelete = async (id: string) => {
     if (!window.confirm('តើបងពិតជាចង់លុបវគ្គសិក្សានេះមែនទេ?')) return;
-
     try {
       const token = localStorage.getItem('token');
-      // បើបង run localhost សូមប្តូរ link ខាងក្រោម
       const res = await fetch(`https://my-skills-api.onrender.com/api/courses/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
-
       const data = await res.json();
-
       if (data.success) {
-        // លុបចេញពី State ភ្លាមៗ
         setCourses(courses.filter(course => course.id !== id));
         alert('បានលុបវគ្គសិក្សាជោគជ័យ!');
       } else {
-        alert(data.message || 'បរាជ័យក្នុងការលុប');
+        alert(data.message);
       }
     } catch (error) {
       alert('មានបញ្ហាក្នុងការភ្ជាប់ទៅ Server');
@@ -66,6 +66,7 @@ const AdminCourseList: React.FC = () => {
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden mt-8">
+      {/* ... Header (រក្សាទុកដដែល) ... */}
       <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
         <h3 className="text-lg font-bold text-slate-800 dark:text-white font-khmer">វគ្គសិក្សាទាំងអស់ ({courses.length})</h3>
         <button onClick={fetchCourses} className="text-sm text-blue-600 hover:underline font-khmer">Refresh</button>
@@ -73,6 +74,7 @@ const AdminCourseList: React.FC = () => {
 
       <div className="overflow-x-auto">
         <table className="w-full text-left">
+          {/* ... Table Header (រក្សាទុកដដែល) ... */}
           <thead className="bg-slate-50 dark:bg-slate-900/50 text-slate-500 font-khmer text-sm">
             <tr>
               <th className="p-4">វគ្គសិក្សា</th>
@@ -81,6 +83,7 @@ const AdminCourseList: React.FC = () => {
               <th className="p-4 text-right">សកម្មភាព</th>
             </tr>
           </thead>
+
           <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
             {courses.length > 0 ? (
               courses.map((course) => (
@@ -100,16 +103,16 @@ const AdminCourseList: React.FC = () => {
                   <td className="p-4">
                     <div className="flex items-center gap-1 text-slate-500 text-sm">
                         <Video size={14} />
-                        {/* ប្រើ Optional chaining ដើម្បីការពារ Error */}
                         {course.modules?.reduce((acc, m) => acc + m.lessons.length, 0) || 0}
                     </div>
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex justify-end gap-2">
+                      {/* 👇 ប៊ូតុង Edit: ហៅ onEdit ពេលចុច */}
                       <button 
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" 
                         title="កែប្រែ"
-                        onClick={() => alert("មុខងារកែប្រែ នឹងមកដល់ឆាប់ៗ!")}
+                        onClick={() => onEdit(course)} 
                       >
                         <Edit size={18} />
                       </button>
@@ -125,9 +128,7 @@ const AdminCourseList: React.FC = () => {
                 </tr>
               ))
             ) : (
-              <tr>
-                <td colSpan={4} className="p-8 text-center text-slate-500 font-khmer">មិនទាន់មានវគ្គសិក្សាទេ</td>
-              </tr>
+              <tr><td colSpan={4} className="p-8 text-center text-slate-500">គ្មានទិន្នន័យ</td></tr>
             )}
           </tbody>
         </table>
