@@ -116,7 +116,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onExit, onSwitchToRegister }) => 
                     onChange={handleChange}
                     required
                     minLength={6}
-                    className="w-full pl-10 pr-12 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:text-white font-khmer placeholder:text-slate-400"
+                    className="w-full pl-10 pr-12 py-3 rounded-lg border text-slate-700 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent dark:text-white font-khmer placeholder:text-slate-400"
                     placeholder="ពាក្យសម្ងាត់របស់អ្នក"
                     disabled={isLoading}
                   />

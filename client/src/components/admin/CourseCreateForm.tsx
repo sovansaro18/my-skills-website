@@ -116,7 +116,7 @@ const CourseCreateForm: React.FC = () => {
               value={formData.price}
               onChange={handleChange}
               min="0"
-              className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 font-khmer focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+              className="w-full p-3 rounded-xl text-slate-700 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 font-khmer focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
             />
           </div>
 
@@ -127,7 +127,7 @@ const CourseCreateForm: React.FC = () => {
               name="level"
               value={formData.level}
               onChange={handleChange}
-              className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 font-khmer focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
+              className="w-full p-3 rounded-xl text-slate-800 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 font-khmer focus:ring-2 focus:ring-blue-500 outline-none dark:text-white"
             >
               <option value="Beginner">Beginner (ដំបូង)</option>
               <option value="Intermediate">Intermediate (មធ្យម)</option>
@@ -136,7 +136,6 @@ const CourseCreateForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Thumbnail Upload */}
         <div>
           <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 font-khmer mb-2">រូបភាពតំណាង (Thumbnail)</label>
           <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-4 flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer relative">
@@ -168,7 +167,6 @@ const CourseCreateForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Status Message */}
         {status && (
           <div className={`p-4 rounded-xl flex items-center gap-3 font-khmer ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
             {status.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
@@ -176,7 +174,6 @@ const CourseCreateForm: React.FC = () => {
           </div>
         )}
 
-        {/* Submit Button */}
         <button
           type="submit"
           disabled={loading}

@@ -279,7 +279,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
                   <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 font-khmer">ពាក្យសម្ងាត់</label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={18} />
-                    <input type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} required minLength={6} className="w-full pl-10 pr-12 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 dark:text-white font-khmer focus:ring-2 focus:ring-green-500 focus:outline-none" placeholder="យ៉ាងហោច ៦ តួអក្សរ" disabled={isLoading} />
+                    <input type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} required minLength={6} className="w-full text-slate-700 pl-10 pr-12 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 dark:text-white font-khmer focus:ring-2 focus:ring-green-500 focus:outline-none" placeholder="យ៉ាងហោច ៦ តួអក្សរ" disabled={isLoading} />
                     <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 p-1" disabled={isLoading}>
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
@@ -290,7 +290,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
                   <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5 font-khmer">បញ្ជាក់ពាក្យសម្ងាត់</label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" size={18} />
-                    <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required minLength={6} className="w-full pl-10 pr-12 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 dark:text-white font-khmer focus:ring-2 focus:ring-green-500 focus:outline-none" placeholder="វាយពាក្យសម្ងាត់ម្តងទៀត" disabled={isLoading} />
+                    <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required minLength={6} className="w-full pl-10 pr-12 py-3 rounded-lg border text-slate-700 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 dark:text-white font-khmer focus:ring-2 focus:ring-green-500 focus:outline-none" placeholder="វាយពាក្យសម្ងាត់ម្តងទៀត" disabled={isLoading} />
                     <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 p-1" disabled={isLoading}>
                       {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
