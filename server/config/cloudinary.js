@@ -1,7 +1,6 @@
 const cloudinary = require('cloudinary').v2;
 const dotenv = require('dotenv');
 
-// ហៅ dotenv ដើម្បីអាន file .env
 dotenv.config();
 
 cloudinary.config({

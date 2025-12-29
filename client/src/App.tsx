@@ -168,7 +168,6 @@ const App: React.FC = () => {
 
   const renderDashboard = () => (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-8">
-      {/* Slideshow */}
       <div className="relative rounded-2xl overflow-hidden shadow-lg h-48 sm:h-64 md:h-96 group">
         {heroImages.map((img, index) => (
           <div key={index} className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? "opacity-100" : "opacity-0"}`}>
@@ -178,16 +177,15 @@ const App: React.FC = () => {
         ))}
       </div>
 
-{/* User Info */}
       {user && (
         <div 
-          onClick={() => setCurrentView(AppView.PROFILE)} // 👈 ១. ដាក់មុខងារចុចត្រង់នេះ
+          onClick={() => setCurrentView(AppView.PROFILE)}
           className="bg-slate-50 text-slate-800 dark:bg-slate-800 dark:text-slate-100 rounded-2xl p-6 shadow-md flex justify-between items-center cursor-pointer hover:shadow-lg transition-all" // 👈 ២. ដាក់ cursor-pointer និង effect ពេលដាក់ Mouse ពីលើ
         >
           <div>
             <h2 className="text-xl font-bold font-khmer">សួស្តី, {user.name}!</h2>
             <p className="font-khmer mt-1 text-slate-500 dark:text-slate-200">
-                ចុចទីនេះ ដើម្បីមើលឬកែប្រែគណនីរបស់អ្នក។ {/* 👈 ៣. កែអក្សរប្រាប់គេបន្តិច */}
+                ចុចទីនេះ ដើម្បីមើលឬកែប្រែគណនីរបស់អ្នក។ 
             </p>
           </div>
           <div className="bg-white/20 p-2 rounded-full">
@@ -200,7 +198,6 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Course List */}
       <div>
         <div className="flex items-center gap-3 mb-6 mt-8">
           <div className="bg-white dark:bg-slate-800 p-2 rounded-xl text-brand-600 dark:text-brand-400 shadow-sm border border-slate-100 dark:border-slate-700"><BookOpen size={20} /></div>

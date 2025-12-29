@@ -1,10 +1,9 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
-const cloudinary = require('../config/cloudinary'); // ត្រូវប្រាកដថា file config នេះមាន
+const cloudinary = require('../config/cloudinary');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 
-// ១. កំណត់ការផ្ទុក Cloudinary សម្រាប់ Update Profile (ប្រើ Multer)
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -14,7 +13,6 @@ const storage = new CloudinaryStorage({
 });
 const upload = multer({ storage: storage });
 
-// ================= REGISTER (កែសម្រួលថ្មី) =================
 const register = async (req, res) => {
   try {
     const { name, email, password, avatar } = req.body;
@@ -30,22 +28,18 @@ const register = async (req, res) => {
 
     let avatarUrl = "";
 
-    // ✅ ចំណុចសំខាន់៖ Upload Base64 ទៅ Cloudinary
     if (avatar) {
       try {
         const uploadResponse = await cloudinary.uploader.upload(avatar, {
           folder: 'my-skills-avatars',
           resource_type: 'image'
         });
-        // យក Link រូបភាពពី Cloudinary មកប្រើ
         avatarUrl = uploadResponse.secure_url; 
       } catch (uploadError) {
         console.error("Cloudinary Upload Error:", uploadError);
-        // បើ Upload មិនកើត អាចទុកជាអក្សរទទេ ឬដាក់រូប Default
       }
     }
 
-    // បង្កើត User ថ្មីដោយប្រើ Link រូបភាព (មិនមែន Base64 ទេ)
     const user = new User({ 
         name, 
         email: email.toLowerCase(), 
@@ -78,7 +72,6 @@ const register = async (req, res) => {
   }
 };
 
-// ================= LOGIN (ទុកដដែល) =================
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -121,7 +114,6 @@ const login = async (req, res) => {
   }
 };
 
-// ================= GET CURRENT USER (ទុកដដែល) =================
 const getMe = async (req, res) => {
   res.json({
     success: true,
@@ -129,7 +121,6 @@ const getMe = async (req, res) => {
   });
 };
 
-// ================= UPDATE PROFILE (ទុកដដែល) =================
 const updateProfile = async (req, res) => {
   try {
     const user = req.user;
@@ -142,7 +133,6 @@ const updateProfile = async (req, res) => {
       user.password = password;
     }
 
-    // ប្រើ req.file ពី Multer Middleware
     if (req.file) {
       user.avatar = req.file.path;
     }
@@ -171,12 +161,10 @@ const updateProfile = async (req, res) => {
   }
 };
 
-// ================= LOGOUT =================
 const logout = (req, res) => {
   res.json({ success: true, message: 'ចាកចេញជោគជ័យ' });
 };
 
-// ================= TOGGLE SAVE LESSON =================
 const toggleSaveLesson = async (req, res) => {
   try {
     const { courseId, moduleId, lessonId, title } = req.body;

@@ -11,7 +11,6 @@ interface RegisterPageProps {
 }
 
 const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) => {
-  // ទាញយក setAuth មកប្រើជំនួស login
   const { setAuth } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -19,10 +18,9 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
     email: '',
     password: '',
     confirmPassword: '',
-    avatar: '' // Base64 string
+    avatar: '' 
   });
 
-  // State សម្រាប់ Cropper
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -35,12 +33,10 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // ១. ពេលរើសរូបភាព (File Change)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       
-      // Check ទំហំ file (5MB)
       if (file.size > 5 * 1024 * 1024) {
           setError('រូបភាពធំពេក (ត្រូវក្រោម 5MB)');
           return;
@@ -49,7 +45,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         setImageSrc(reader.result as string);
-        setIsCropping(true); // បើកផ្ទាំង Crop
+        setIsCropping(true);
       });
       reader.readAsDataURL(file);
     }
@@ -71,8 +67,8 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
         reader.onloadend = () => {
             const base64data = reader.result as string;
             setFormData(prev => ({ ...prev, avatar: base64data }));
-            setIsCropping(false); // បិទផ្ទាំង Crop
-            setImageSrc(null); // Reset
+            setIsCropping(false);
+            setImageSrc(null); 
         };
       }
     } catch (e) {
@@ -102,7 +98,6 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
     return true;
   };
 
-  // 👇 កន្លែង Submit Form
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -111,17 +106,16 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
     setError('');
     
     try {
-      // ហៅទៅ Backend (សូមប្រាកដថា URL ត្រឹមត្រូវ)
-      const res = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            password: formData.password,
-            avatar: formData.avatar
-        }),
-      });
+    const res = await fetch('https://my-skills-api.onrender.com/api/auth/register', { 
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          avatar: formData.avatar
+      }),
+    });
 
       const data = await res.json();
 
@@ -133,12 +127,10 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
       const user = data.user || data.data?.user;
 
       if (token && user) {
-        // ✅ ប្រើ setAuth ជំនួស login ដើម្បី Update State ភ្លាមៗ
         setAuth(token, user);
 
         setSuccess('ចុះឈ្មោះជោគជ័យ! កំពុងចូលគណនី...');
         
-        // បិទ Form ហើយចូល Dashboard
         setTimeout(() => {
             onExit(); 
         }, 1500);
@@ -158,7 +150,6 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onExit, onSwitchToLogin }) 
   return (
     <div className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 overflow-y-auto">
       
-      {/* ============ POPUP សម្រាប់ CROP រូបភាព ============ */}
       {isCropping && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 animate-fade-in">
           <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-md overflow-hidden flex flex-col h-[500px]">
