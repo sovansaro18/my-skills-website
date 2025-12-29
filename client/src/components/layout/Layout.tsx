@@ -24,7 +24,6 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
   const FALLBACK_AVATAR = "/Avatar.png";
   const userAvatar = user?.avatar || FALLBACK_AVATAR;
 
-  // 👇 ១. បានដាក់ 'គណនីរបស់ខ្ញុំ' ចូលក្នុងបញ្ជីនេះ (មាន requireAuth: true)
   const navItems = [
     { view: AppView.DASHBOARD, label: 'វគ្គសិក្សាទាំងអស់', icon: LayoutDashboard },
     { view: AppView.SAVED, label: 'មេរៀនដែលបានរក្សាទុក', icon: Bookmark, requireAuth: true },
@@ -118,7 +117,6 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
             <div className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3 px-2 font-khmer">ម៉ឺនុយទូទៅ</div>
             <div className="space-y-1">
               {navItems.map((item) => {
-                // បើត្រូវការ Login តែមិនទាន់ Login => មិនបង្ហាញ
                 if (item.requireAuth && !user) return null;
                 
                 return (
@@ -132,7 +130,6 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
                 );
               })}
 
-                {/* 👇 ២. Admin Panel ពិសេសសម្រាប់ Admin */}
                 {user && user.role === 'admin' && (
                   <NavItem 
                     icon={Settings} 
@@ -141,7 +138,6 @@ const Layout: React.FC<LayoutProps> = ({ children, currentView, onNavigate }) =>
                     onClick={() => { onNavigate(AppView.ADMIN); setIsSidebarOpen(false); }}
                     className="mt-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 hover:bg-blue-100" 
                   />
-                  /* ⚠️ បានលុប Profile ចេញពីទីនេះហើយ ព្រោះវានៅក្នុង navItems ខាងលើ */
                 )}
             </div>
           </div>

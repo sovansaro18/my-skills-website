@@ -4,7 +4,8 @@ import { Bell, Check, Info, BookOpen, Star, X, Clock, Calendar } from 'lucide-re
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 
-// កំណត់ Type សម្រាប់ Notification
+const API_URL = 'https://my-skills-api.onrender.com/api';
+
 interface Notification {
   _id: string;
   type: 'lesson' | 'homework' | 'system';
@@ -19,7 +20,6 @@ const NotificationDropdown: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [mounted, setMounted] = useState(false);
   
-  // 👇 State សម្រាប់ទុកសារដែលត្រូវបង្ហាញក្នុង Popup
   const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
   
   const { user } = useAuth();
@@ -40,7 +40,7 @@ const NotificationDropdown: React.FC = () => {
   const fetchNotifications = async () => {
     try {
         const token = localStorage.getItem("token");
-        const res = await fetch('http://localhost:5000/api/notifications', {
+        const res = await fetch(`${API_URL}/notifications`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -61,7 +61,7 @@ const NotificationDropdown: React.FC = () => {
 
     try {
         const token = localStorage.getItem("token");
-        await fetch('http://localhost:5000/api/notifications/mark-all-read', {
+        await fetch(`${API_URL}/notifications/mark-all-read`, {
             method: 'PUT',
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -70,14 +70,10 @@ const NotificationDropdown: React.FC = () => {
     }
   };
 
-  // 👇 កែសម្រួល៖ ពេលចុចលើសារ គឺបើក Popup ហើយ Mark as read
   const handleNotificationClick = async (notification: Notification) => {
-    // ១. បើក Popup បង្ហាញសារ
     setSelectedNotification(notification);
-    // ២. បិទ Dropdown តូច
     setIsOpen(false);
 
-    // ៣. បើវាមិនទាន់អាន ធ្វើការ Mark as read
     if (!notification.isRead) {
         const updatedNotifs = notifications.map(n => 
             n._id === notification._id ? { ...n, isRead: true } : n
@@ -86,7 +82,7 @@ const NotificationDropdown: React.FC = () => {
 
         try {
             const token = localStorage.getItem("token");
-            await fetch(`http://localhost:5000/api/notifications/${notification._id}/read`, {
+            await fetch(`${API_URL}/notifications/${notification._id}/read`, {
                 method: 'PUT',
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -137,7 +133,6 @@ const NotificationDropdown: React.FC = () => {
         )}
       </button>
 
-      {/* Dropdown Menu */}
       {mounted && createPortal(
         <AnimatePresence>
           {isOpen && (
@@ -196,7 +191,6 @@ const NotificationDropdown: React.FC = () => {
                       {notifications.map((notification) => (
                           <div
                           key={notification._id}
-                          // 👇 ហៅ function ថ្មី
                           onClick={() => handleNotificationClick(notification)}
                           className={`p-4 rounded-xl cursor-pointer transition-all border ${!notification.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10 border-blue-100 dark:border-blue-900/30' : 'bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border-transparent hover:border-slate-200 dark:hover:border-slate-700'}`}
                           >
@@ -235,12 +229,10 @@ const NotificationDropdown: React.FC = () => {
         document.body
       )}
 
-      {/* 👇 ផ្នែកថ្មី៖ Popup បង្ហាញសារលម្អិត */}
       {mounted && createPortal(
         <AnimatePresence>
             {selectedNotification && (
                 <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
-                    {/* Backdrop */}
                     <motion.div 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -249,14 +241,12 @@ const NotificationDropdown: React.FC = () => {
                         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                     />
 
-                    {/* Modal Content */}
                     <motion.div 
                         initial={{ scale: 0.9, opacity: 0, y: 20 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.9, opacity: 0, y: 20 }}
                         className="relative bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100 dark:border-slate-800"
                     >
-                        {/* Header */}
                         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-start gap-4 bg-slate-50/50 dark:bg-slate-800/50">
                             <div className="p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
                                 {getIcon(selectedNotification.type)}
@@ -278,7 +268,6 @@ const NotificationDropdown: React.FC = () => {
                             </button>
                         </div>
 
-                        {/* Body */}
                         <div className="p-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
                             <div className="prose dark:prose-invert max-w-none">
                                 <p className="font-khmer text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
@@ -287,7 +276,6 @@ const NotificationDropdown: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Footer */}
                         <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end">
                             <button 
                                 onClick={() => setSelectedNotification(null)}
