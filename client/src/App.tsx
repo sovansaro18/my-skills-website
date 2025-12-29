@@ -126,11 +126,12 @@ const App: React.FC = () => {
     }
   };
 
-  const toggleSaveLesson = async () => {
+const toggleSaveLesson = async () => {
     if (!selectedCourse || !selectedModule || !selectedLesson || !user) return;
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/auth/toggle-save-lesson", { 
+      
+      const res = await fetch("https://my-skills-api.onrender.com/api/auth/toggle-save-lesson", { 
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({

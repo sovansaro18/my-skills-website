@@ -24,7 +24,7 @@ export default async function getCroppedImg(
   pixelCrop: { x: number; y: number; width: number; height: number },
   rotation = 0,
   flip = { horizontal: false, vertical: false }
-): Promise<Blob | null> { // 👈 កែត្រង់នេះទៅជា Blob
+): Promise<Blob | null> {
   const image = await createImage(imageSrc);
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -51,7 +51,6 @@ export default async function getCroppedImg(
 
   ctx.putImageData(data, 0, 0);
 
-  // Return ជា Blob ដើម្បីឱ្យ UserProfile យកទៅប្រើបាន
   return new Promise((resolve) => {
     canvas.toBlob((file) => {
       resolve(file);

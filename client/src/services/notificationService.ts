@@ -1,4 +1,3 @@
-// Abstracted notification API calls
 import axios from 'axios';
 
 const API_URL = '/api/notifications';

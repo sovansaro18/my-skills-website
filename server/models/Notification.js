@@ -4,11 +4,11 @@ const notificationSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true // ម្ចាស់ Notification (អ្នកទទួល)
+    required: true
   },
   type: {
     type: String,
-    enum: ['lesson', 'homework', 'system'], // ប្រភេទនៃដំណឹង
+    enum: ['lesson', 'homework', 'system'],
     default: 'system'
   },
   title: {
