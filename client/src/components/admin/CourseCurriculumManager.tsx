@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Video, Trash2, ChevronDown, ChevronRight, PlayCircle, Clock, DollarSign } from 'lucide-react';
+import { X, Plus, Video, Trash2, ChevronDown, ChevronRight, PlayCircle, Clock, FileText } from 'lucide-react';
 import { Course, Module, Lesson } from '../../types';
 
 interface CurriculumManagerProps {
@@ -11,26 +11,25 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
   
-  // State សម្រាប់ Form បន្ថែម Module
   const [newModuleTitle, setNewModuleTitle] = useState('');
   const [isAddingModule, setIsAddingModule] = useState(false);
 
-  // State សម្រាប់ Form បន្ថែម Lesson (ទុកដឹងថាកំពុងបន្ថែមចូល Module មួយណា)
   const [activeModuleId, setActiveModuleId] = useState<string | null>(null);
+  
+  // 🔥 បន្ថែម field 'content' ចូលក្នុង State
   const [lessonForm, setLessonForm] = useState({
     title: '',
     videoUrl: '',
     duration: '',
-    isFree: false
+    isFree: false,
+    content: '' 
   });
 
-  // State សម្រាប់បើក/បិទ Accordion (មើលមេរៀនក្នុងជំពូក)
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
 
-  // ១. ទាញទិន្នន័យវគ្គសិក្សាមកបង្ហាញ
   const fetchCourseDetails = async () => {
     try {
-      const res = await fetch(`https://my-skills-api.onrender.com/api/courses`); // ទាញទាំងអស់សិន (អាចកែទៅ getById បើ backend មាន)
+      const res = await fetch(`https://my-skills-api.onrender.com/api/courses`);
       const data = await res.json();
       if (data.success) {
         const foundCourse = data.data.find((c: any) => c._id === courseId);
@@ -41,7 +40,6 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
             modules: foundCourse.modules || []
           });
           
-          // បើក Module ទាំងអស់ឱ្យស្រាប់
           const expanded: Record<string, boolean> = {};
           foundCourse.modules?.forEach((m: any) => expanded[m._id] = true);
           setExpandedModules(expanded);
@@ -58,7 +56,6 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
     fetchCourseDetails();
   }, [courseId]);
 
-  // ២. មុខងារបន្ថែម Module
   const handleAddModule = async () => {
     if (!newModuleTitle.trim()) return;
     try {
@@ -75,16 +72,15 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
       if (data.success) {
         setNewModuleTitle('');
         setIsAddingModule(false);
-        fetchCourseDetails(); // Refresh ទិន្នន័យ
+        fetchCourseDetails();
       }
     } catch (error) {
       alert('បរាជ័យក្នុងការបន្ថែមជំពូក');
     }
   };
 
-  // ៣. មុខងារបន្ថែម Lesson
   const handleAddLesson = async (moduleId: string) => {
-    if (!lessonForm.title.trim() || !lessonForm.videoUrl.trim()) return;
+    if (!lessonForm.title.trim()) return; // videoUrl អាចទទេបាន បើគេចង់ដាក់តែ content
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`https://my-skills-api.onrender.com/api/courses/${courseId}/modules/${moduleId}/lessons`, {
@@ -93,13 +89,13 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(lessonForm)
+        body: JSON.stringify(lessonForm) // បញ្ជូន content ទៅជាមួយ
       });
       const data = await res.json();
       if (data.success) {
-        setLessonForm({ title: '', videoUrl: '', duration: '', isFree: false });
-        setActiveModuleId(null); // បិទ Form
-        fetchCourseDetails(); // Refresh
+        setLessonForm({ title: '', videoUrl: '', duration: '', isFree: false, content: '' });
+        setActiveModuleId(null);
+        fetchCourseDetails();
       }
     } catch (error) {
       alert('បរាជ័យក្នុងការបន្ថែមមេរៀន');
@@ -117,7 +113,6 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-white dark:bg-slate-900 w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
         
-        {/* Header */}
         <div className="p-6 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800">
           <div>
             <h2 className="text-xl font-bold text-slate-800 dark:text-white font-khmer">គ្រប់គ្រងមេរៀន</h2>
@@ -128,15 +123,12 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
           </button>
         </div>
 
-        {/* Content Scrollable */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           
-          {/* List Modules */}
           <div className="space-y-4">
             {course.modules?.map((module: any) => (
               <div key={module._id} className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-white dark:bg-slate-800 shadow-sm">
                 
-                {/* Module Header */}
                 <div 
                   className="p-4 bg-slate-50 dark:bg-slate-700/50 flex justify-between items-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition"
                   onClick={() => toggleModule(module._id)}
@@ -150,7 +142,6 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
                   </div>
                 </div>
 
-                {/* Lessons List */}
                 {expandedModules[module._id] && (
                   <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 space-y-3">
                     {module.lessons.map((lesson: any) => (
@@ -163,6 +154,7 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
                             <p className="text-sm font-medium text-slate-800 dark:text-slate-200 font-khmer">{lesson.title}</p>
                             <div className="flex items-center gap-3 mt-1">
                                 <span className="text-xs text-slate-400 flex items-center gap-1"><Clock size={10} /> {lesson.duration || '00:00'}</span>
+                                {lesson.content && <span className="text-[10px] bg-purple-100 text-purple-700 px-1.5 rounded font-bold flex items-center gap-1"><FileText size={8} /> Content</span>}
                                 {lesson.isFree && <span className="text-[10px] bg-green-100 text-green-700 px-1.5 rounded font-bold">Free</span>}
                             </div>
                           </div>
@@ -170,29 +162,47 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
                       </div>
                     ))}
 
-                    {/* Add Lesson Form */}
                     {activeModuleId === module._id ? (
                       <div className="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-blue-200 dark:border-blue-900">
                         <h4 className="text-sm font-bold text-blue-600 mb-3 font-khmer">បន្ថែមមេរៀនថ្មី</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                        
+                        <div className="grid grid-cols-1 gap-3 mb-3">
+                          {/* Title */}
                           <input 
-                            placeholder="ចំណងជើងមេរៀន" 
-                            className="p-2 rounded border border-slate-300 dark:border-slate-600 dark:bg-slate-900 font-khmer text-sm"
+                            placeholder="ចំណងជើងមេរៀន *" 
+                            className="p-2 rounded border border-slate-300 dark:border-slate-600 dark:bg-slate-900 font-khmer text-sm w-full"
                             value={lessonForm.title}
                             onChange={(e) => setLessonForm({...lessonForm, title: e.target.value})}
                           />
-                          <input 
-                            placeholder="Link វីដេអូ (Youtube/Cloudinary)" 
-                            className="p-2 rounded border border-slate-300 dark:border-slate-600 dark:bg-slate-900 text-sm"
-                            value={lessonForm.videoUrl}
-                            onChange={(e) => setLessonForm({...lessonForm, videoUrl: e.target.value})}
-                          />
-                          <input 
-                            placeholder="រយៈពេល (ឧ. 10:00)" 
-                            className="p-2 rounded border border-slate-300 dark:border-slate-600 dark:bg-slate-900 text-sm"
-                            value={lessonForm.duration}
-                            onChange={(e) => setLessonForm({...lessonForm, duration: e.target.value})}
-                          />
+                          
+                          {/* Video & Duration */}
+                          <div className="grid grid-cols-2 gap-3">
+                             <input 
+                                placeholder="Link វីដេអូ (Youtube/Cloudinary)" 
+                                className="p-2 rounded border border-slate-300 dark:border-slate-600 dark:bg-slate-900 text-sm"
+                                value={lessonForm.videoUrl}
+                                onChange={(e) => setLessonForm({...lessonForm, videoUrl: e.target.value})}
+                             />
+                             <input 
+                                placeholder="រយៈពេល (ឧ. 10:00)" 
+                                className="p-2 rounded border border-slate-300 dark:border-slate-600 dark:bg-slate-900 text-sm"
+                                value={lessonForm.duration}
+                                onChange={(e) => setLessonForm({...lessonForm, duration: e.target.value})}
+                             />
+                          </div>
+
+                          {/* 🔥 Content Textarea (Markdown) */}
+                          <div>
+                            <label className="text-xs text-slate-500 font-khmer mb-1 block">ខ្លឹមសារមេរៀន (អាចប្រើ Markdown: # Title, **Bold**, ![Img](url))</label>
+                            <textarea 
+                                placeholder="សរសេរខ្លឹមសារមេរៀននៅទីនេះ..." 
+                                rows={5}
+                                className="w-full p-2 rounded border border-slate-300 dark:border-slate-600 dark:bg-slate-900 text-sm font-khmer"
+                                value={lessonForm.content}
+                                onChange={(e) => setLessonForm({...lessonForm, content: e.target.value})}
+                            />
+                          </div>
+
                           <div className="flex items-center gap-2">
                              <input 
                                 type="checkbox" 
@@ -203,6 +213,7 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
                              <label htmlFor="isFree" className="text-sm text-slate-600 dark:text-slate-400 font-khmer">មេរៀនឥតគិតថ្លៃ (Free Preview)</label>
                           </div>
                         </div>
+
                         <div className="flex gap-2 justify-end">
                             <button onClick={() => setActiveModuleId(null)} className="px-3 py-1.5 text-sm text-slate-500 hover:bg-slate-200 rounded">Cancel</button>
                             <button onClick={() => handleAddLesson(module._id)} className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 font-khmer">រក្សាទុក</button>
@@ -221,7 +232,6 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
               </div>
             ))}
 
-            {/* Empty State */}
             {(!course.modules || course.modules.length === 0) && (
               <div className="text-center py-10 text-slate-400">
                 <Video size={40} className="mx-auto mb-2 opacity-20" />
@@ -229,10 +239,8 @@ const CourseCurriculumManager: React.FC<CurriculumManagerProps> = ({ courseId, o
               </div>
             )}
           </div>
-
         </div>
 
-        {/* Footer: Add Module Button */}
         <div className="p-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
             {isAddingModule ? (
                 <div className="flex gap-2">

@@ -132,12 +132,14 @@ const addModule = async (req, res) => {
   }
 };
 
-// @desc    បន្ថែមមេរៀនថ្មី (Add Lesson)
+// @desc    បន្ថែមមេរៀនថ្មី (Add Lesson) - ជាមួយនឹង Content
 // @route   POST /api/courses/:id/modules/:moduleId/lessons
 // @access  Private/Admin
 const addLesson = async (req, res) => {
   try {
-    const { title, videoUrl, duration, isFree } = req.body;
+    // 👇 ទទួលយក content ពី req.body
+    const { title, videoUrl, duration, isFree, content } = req.body;
+    
     const course = await Course.findById(req.params.id);
 
     if (!course) {
@@ -154,7 +156,8 @@ const addLesson = async (req, res) => {
       title,
       videoUrl,
       duration, // ឧ. "10:00"
-      isFree: isFree === 'true' || isFree === true // កែប្រែ string ទៅ boolean
+      isFree: isFree === 'true' || isFree === true, // កែប្រែ string ទៅ boolean
+      content: content || '' // 👇 រក្សាទុក content (បើអត់មាន ដាក់ទទេ)
     };
 
     module.lessons.push(newLesson);
@@ -172,6 +175,6 @@ module.exports = {
   getCourses,
   updateCourse,
   deleteCourse,
-  addModule, // ថែមថ្មី
-  addLesson  // ថែមថ្មី
+  addModule,
+  addLesson
 };
